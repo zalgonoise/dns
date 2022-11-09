@@ -1,3 +1,7 @@
+"""
+Updated version of golangci-lint
+"""
+
 load("@bazel_skylib//lib:shell.bzl", "shell")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@io_bazel_rules_go//go:def.bzl", "GoSDK")
@@ -82,6 +86,12 @@ _golangcilint = rule(
 )
 
 def golangcilint(**kwargs):
+    """
+    Wrapper for the _golangcilint rule. Adds 'manual' to the tags.
+
+    Args:
+      **kwargs: all parameters for golangcilint
+    """
     tags = kwargs.get("tags", [])
     if "manual" not in tags:
         tags.append("manual")

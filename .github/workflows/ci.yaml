@@ -22,9 +22,6 @@ jobs:
     - name: Run buildifier checks
       run: bazel run //:buildifier-check --
       
-    - name: Run buildifier fixes
-      run: bazel run //:buildifier-fix --
-
   gazelle:
     
     runs-on: ubuntu-latest
