@@ -135,7 +135,7 @@ func dnsQuestion(targetURI, rtype, domain string) *dns.Msg {
 func TestTransport(t *testing.T) {
 	dnsC, err := initService()
 	if err != nil {
-		t.Log("unexpected error starting test container; skipping e2e tests: %v", err)
+		t.Logf("unexpected error starting test container; skipping e2e tests: %v", err)
 		return
 	}
 	defer func() {
