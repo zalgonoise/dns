@@ -50,22 +50,20 @@ jobs:
 
   golanglint-ci:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-      
-    - name: Deploy bazelisk
-      uses: bazelbuild/setup-bazelisk@v1
-      
-    - name: Mount bazel cache  
-      uses: actions/cache@v2
+    - name: Setup Go
+      uses: actions/setup-go@v3
       with:
-        path: "~/.cache/bazel"
-        key: bazel
-    - name: Run gazelle
-      run: bazel run //:lint
+        go-version: ${{ matrix.go-version }}
+
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@v3
+      with:
+        # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
+        version: v1.50.1
 
   bazel-build:
     runs-on: ubuntu-latest
