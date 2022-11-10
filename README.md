@@ -2,6 +2,10 @@
 
 *A basic but modular domain name server*
 
+[![Bazel-CI](https://github.com/zalgonoise/dns/actions/workflows/ci.yaml/badge.svg?branch=master)](https://github.com/zalgonoise/dns/actions/workflows/ci.yaml)
+[![Bazel-CD](https://github.com/zalgonoise/dns/actions/workflows/cd.yaml/badge.svg?branch=master)](https://github.com/zalgonoise/dns/actions/workflows/cd.yaml)
+
+
 ___________________
 
 
