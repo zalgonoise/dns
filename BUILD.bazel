@@ -70,7 +70,6 @@ container_push(
     repository = "zalgonoise/dns",
 )
 
-
 platform(
     name = "x64",
     constraint_values = [
