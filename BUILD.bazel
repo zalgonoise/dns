@@ -1,7 +1,7 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 load("@bazel_gazelle//:def.bzl", "gazelle")
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
-load("@io_bazel_rules_docker//container:container.bzl", "container_image")
+load("@io_bazel_rules_docker//container:container.bzl", "container_image", "container_push")
 load("@com_github_atlassian_bazel_tools//golangcilint:def.bzl", "golangcilint")
 
 # gazelle:prefix github.com/zalgonoise/dns
@@ -50,6 +50,55 @@ container_image(
     base = "@alpine_linux_amd64//image",
     entrypoint = ["/dns"],
     files = [":dns"],
-    repository = "zalgonoise/x/dns",
+    repository = "zalgonoise/dns",
     user = "dns",
+)
+
+container_push(
+    name = "dockerhub-push",
+    format = "Docker",
+    image = ":latest",
+    registry = "index.docker.io",
+    repository = "zalgonoise/dns",
+)
+
+container_push(
+    name = "github-push",
+    format = "Docker",
+    image = ":latest",
+    registry = "ghcr.io",
+    repository = "zalgonoise/dns",
+)
+
+
+platform(
+    name = "x64",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
+    ],
+)
+
+platform(
+    name = "x86",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_32",
+    ],
+)
+
+platform(
+    name = "arm64",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:arm64",
+    ],
+)
+
+platform(
+    name = "arm",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:arm",
+    ],
 )
