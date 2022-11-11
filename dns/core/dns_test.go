@@ -51,8 +51,8 @@ func TestFallback(t *testing.T) {
 
 		core.Fallback(r, m)
 
-		if len(m.Answer) != 1 {
-			t.Errorf("unexpected answer length: wanted %v ; got %v", 1, len(m.Answer))
+		if len(m.Answer) == 0 {
+			t.Errorf("unexpected answer length: wanted >%v ; got %v", 0, len(m.Answer))
 		}
 		if !strings.Contains(m.Answer[0].String(), testRealDomain) {
 			t.Errorf("unexpected answer: should contain domain %s ; got %s", testRealDomain, m.Answer[0].String())
