@@ -317,8 +317,8 @@ func TestTransport(t *testing.T) {
 				t.Errorf("unexpected nil DNS message")
 				return
 			}
-			if len(m.Answer) != 1 {
-				t.Errorf("unexpected answer length: wanted %v ; got %v", 1, len(m.Answer))
+			if len(m.Answer) == 0 {
+				t.Errorf("unexpected answer length: wanted >%v ; got %v", 0, len(m.Answer))
 				return
 			}
 
