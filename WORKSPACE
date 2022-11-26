@@ -155,13 +155,6 @@ go_repository(
 )
 
 go_repository(
-    name = "com_github_golang_snappy",
-    importpath = "github.com/golang/snappy",
-    sum = "h1:Qgr9rKW7uDUkrbSmQeiDsGa8SjGyCOGtuasMWwvp2P4=",
-    version = "v0.0.1",
-)
-
-go_repository(
     name = "com_github_google_go_cmp",
     importpath = "github.com/google/go-cmp",
     sum = "h1:O2Tfq5qg4qc4AmwVlvv0oLiVAGB7enBSJ2x2DqQFi38=",
@@ -190,80 +183,10 @@ go_repository(
 )
 
 go_repository(
-    name = "com_github_jackc_chunkreader_v2",
-    importpath = "github.com/jackc/chunkreader/v2",
-    sum = "h1:i+RDz65UE+mmpjTfyz0MoVTnzeYxroil2G82ki7MGG8=",
-    version = "v2.0.1",
-)
-
-go_repository(
-    name = "com_github_jackc_pgconn",
-    importpath = "github.com/jackc/pgconn",
-    sum = "h1:HiHArx4yFbwl91X3qqIHtUFoiIfLNJXCQRsnzkiwwaQ=",
-    version = "v1.11.0",
-)
-
-go_repository(
-    name = "com_github_jackc_pgio",
-    importpath = "github.com/jackc/pgio",
-    sum = "h1:g12B9UwVnzGhueNavwioyEEpAmqMe1E/BN9ES+8ovkE=",
-    version = "v1.0.0",
-)
-
-go_repository(
-    name = "com_github_jackc_pgpassfile",
-    importpath = "github.com/jackc/pgpassfile",
-    sum = "h1:/6Hmqy13Ss2zCq62VdNG8tM1wchn8zjSGOBJ6icpsIM=",
-    version = "v1.0.0",
-)
-
-go_repository(
-    name = "com_github_jackc_pgproto3_v2",
-    importpath = "github.com/jackc/pgproto3/v2",
-    sum = "h1:r7JypeP2D3onoQTCxWdTpCtJ4D+qpKr0TxvoyMhZ5ns=",
-    version = "v2.2.0",
-)
-
-go_repository(
-    name = "com_github_jackc_pgservicefile",
-    importpath = "github.com/jackc/pgservicefile",
-    sum = "h1:C8S2+VttkHFdOOCXJe+YGfa4vHYwlt4Zx+IVXQ97jYg=",
-    version = "v0.0.0-20200714003250-2b9c44734f2b",
-)
-
-go_repository(
-    name = "com_github_jackc_pgtype",
-    importpath = "github.com/jackc/pgtype",
-    sum = "h1:ILnBWrRMSXGczYvmkYD6PsYyVFUNLTnIUJHHDLmqk38=",
-    version = "v1.10.0",
-)
-
-go_repository(
-    name = "com_github_jackc_pgx_v4",
-    importpath = "github.com/jackc/pgx/v4",
-    sum = "h1:B7dTkXsdILD3MF987WGGCcg+tvLW6bZJdEcqVFeU//w=",
-    version = "v4.15.0",
-)
-
-go_repository(
-    name = "com_github_jinzhu_inflection",
-    importpath = "github.com/jinzhu/inflection",
-    sum = "h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD/E=",
-    version = "v1.0.0",
-)
-
-go_repository(
-    name = "com_github_jinzhu_now",
-    importpath = "github.com/jinzhu/now",
-    sum = "h1:/o9tlHleP7gOFmsnYNz3RGnqzefHA47wQpKrrdTIwXQ=",
-    version = "v1.1.5",
-)
-
-go_repository(
     name = "com_github_klauspost_compress",
     importpath = "github.com/klauspost/compress",
-    sum = "h1:P76CopJELS0TiO2mebmnzgWaajssP/EszplttgQxcgc=",
-    version = "v1.13.6",
+    sum = "h1:eSvu8Tmq6j2psUJqJrLcWH6K3w5Dwc+qipbaA6eVEN4=",
+    version = "v1.11.13",
 )
 
 go_repository(
@@ -302,24 +225,10 @@ go_repository(
 )
 
 go_repository(
-    name = "com_github_mattn_go_sqlite3",
-    importpath = "github.com/mattn/go-sqlite3",
-    sum = "h1:TJ1bhYJPV44phC+IMu1u2K/i5RriLTPe+yc68XDJ1Z0=",
-    version = "v1.14.12",
-)
-
-go_repository(
     name = "com_github_miekg_dns",
     importpath = "github.com/miekg/dns",
     sum = "h1:DQUfb9uc6smULcREF09Uc+/Gd46YWqJd5DbpPE9xkcA=",
     version = "v1.1.50",
-)
-
-go_repository(
-    name = "com_github_montanaflynn_stats",
-    importpath = "github.com/montanaflynn/stats",
-    sum = "h1:iruDEfMl2E6fbMZ9s0scYfZQ84/6SPL6zC8ACM2oIL0=",
-    version = "v0.0.0-20171201202039-1bf9dbcd8cbe",
 )
 
 go_repository(
@@ -351,13 +260,6 @@ go_repository(
 )
 
 go_repository(
-    name = "com_github_rs_zerolog",
-    importpath = "github.com/rs/zerolog",
-    sum = "h1:1T7qCieN22GVc8S4Q2yuexzBb1EqjbgjSH9RohbMjKs=",
-    version = "v1.27.0",
-)
-
-go_repository(
     name = "com_github_sirupsen_logrus",
     importpath = "github.com/sirupsen/logrus",
     sum = "h1:trlNQbNUG3OdDrDil03MCb1H2o9nJ1x4/5LYw7byDE0=",
@@ -379,52 +281,10 @@ go_repository(
 )
 
 go_repository(
-    name = "com_github_tidwall_pretty",
-    importpath = "github.com/tidwall/pretty",
-    sum = "h1:HsD+QiTn7sK6flMKIvNmpqz1qrpP3Ps6jOKIKMooyg4=",
-    version = "v1.0.0",
-)
-
-go_repository(
-    name = "com_github_xdg_go_pbkdf2",
-    importpath = "github.com/xdg-go/pbkdf2",
-    sum = "h1:Su7DPu48wXMwC3bs7MCNG+z4FhcyEuz5dlvchbq0B0c=",
-    version = "v1.0.0",
-)
-
-go_repository(
-    name = "com_github_xdg_go_scram",
-    importpath = "github.com/xdg-go/scram",
-    sum = "h1:akYIkZ28e6A96dkWNJQu3nmCzH3YfwMPQExUYDaRv7w=",
-    version = "v1.0.2",
-)
-
-go_repository(
-    name = "com_github_xdg_go_stringprep",
-    importpath = "github.com/xdg-go/stringprep",
-    sum = "h1:6iq84/ryjjeRmMJwxutI51F2GIPlP5BfTvXHeYjyhBc=",
-    version = "v1.0.2",
-)
-
-go_repository(
-    name = "com_github_youmark_pkcs8",
-    importpath = "github.com/youmark/pkcs8",
-    sum = "h1:splanxYIlg+5LfHAM6xpdFEAYOk8iySO56hMFq6uLyA=",
-    version = "v0.0.0-20181117223130-1be2e3e5546d",
-)
-
-go_repository(
     name = "com_github_yuin_goldmark",
     importpath = "github.com/yuin/goldmark",
     sum = "h1:fVcFKWvrslecOb/tg+Cc05dkeYx540o0FuFt3nUVDoE=",
     version = "v1.4.13",
-)
-
-go_repository(
-    name = "com_github_zalgonoise_zlog",
-    importpath = "github.com/zalgonoise/zlog",
-    sum = "h1:OgQBVJx+6wMk+Gh5PeT5utw5ieNIXBzfFjz2cgQ4Lss=",
-    version = "v0.0.0-20220923183542-660a5ed27c5a",
 )
 
 go_repository(
@@ -453,34 +313,6 @@ go_repository(
     importpath = "gopkg.in/yaml.v3",
     sum = "h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=",
     version = "v3.0.1",
-)
-
-go_repository(
-    name = "io_gorm_driver_mysql",
-    importpath = "gorm.io/driver/mysql",
-    sum = "h1:jXG9ANrwBc4+bMvBcSl8zCfPBaVoPyBEBshA8dA93X8=",
-    version = "v1.3.3",
-)
-
-go_repository(
-    name = "io_gorm_driver_postgres",
-    importpath = "gorm.io/driver/postgres",
-    sum = "h1:evZ7plF+Bp+Lr1mO5NdPvd6M/N98XtwHixGB+y7fdEQ=",
-    version = "v1.3.4",
-)
-
-go_repository(
-    name = "io_gorm_driver_sqlite",
-    importpath = "gorm.io/driver/sqlite",
-    sum = "h1:bwfE+zTEWklBYoEodIOIBwuWHpnx52Z9zJFW5F33WLk=",
-    version = "v1.3.1",
-)
-
-go_repository(
-    name = "io_gorm_gorm",
-    importpath = "gorm.io/gorm",
-    sum = "h1:1BKWM67O6CflSLcwGQR7ccfmC4ebOxQrTfOQGRE9wjg=",
-    version = "v1.23.4",
 )
 
 go_repository(
@@ -603,31 +435,24 @@ go_repository(
 )
 
 go_repository(
-    name = "org_mongodb_go_mongo_driver",
-    importpath = "go.mongodb.org/mongo-driver",
-    sum = "h1:f3aLGJvQmBl8d9S40IL+jEyBC6hfLPbJjv9t5hEM9ck=",
-    version = "v1.9.0",
-)
-
-go_repository(
     name = "org_uber_go_atomic",
     importpath = "go.uber.org/atomic",
-    sum = "h1:ECmE8Bn/WFTYwEW/bpKD3M8VtR/zQVbavAoalC1PYyE=",
-    version = "v1.9.0",
+    sum = "h1:cxzIVoETapQEqDhQu3QfnvXAV4AlzcvUCxkVUFw3+EU=",
+    version = "v1.4.0",
 )
 
 go_repository(
     name = "org_uber_go_multierr",
     importpath = "go.uber.org/multierr",
-    sum = "h1:dg6GjLku4EH+249NNmoIciG9N/jURbDG+pFlTkhzIC8=",
-    version = "v1.8.0",
+    sum = "h1:HoEmRHQPVSqub6w2z2d2EOVs2fjyFRGyofhKuyDq0QI=",
+    version = "v1.1.0",
 )
 
 go_repository(
     name = "org_uber_go_zap",
     importpath = "go.uber.org/zap",
-    sum = "h1:Zcye5DUgBloQ9BaT4qc9BnjOFog5TvBSAGkJ3Nf70c0=",
-    version = "v1.22.0",
+    sum = "h1:ORx85nbTijNz8ljznvCMR1ZBIPKFn3jQrag10X2AsuM=",
+    version = "v1.10.0",
 )
 
 go_repository(
@@ -3523,4 +3348,11 @@ container_pull(
     registry = "index.docker.io",
     repository = "library/alpine",
     tag = "edge",
+)
+
+go_repository(
+    name = "com_github_zalgonoise_logx",
+    importpath = "github.com/zalgonoise/logx",
+    sum = "h1:ZNPnoXvbaOdPMmKK1Zmp36YyQSsxCpDljS5hiJLHo24=",
+    version = "v0.0.0-20221126153808-6da322918f5d",
 )
