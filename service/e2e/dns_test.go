@@ -9,6 +9,7 @@ import (
 )
 
 func TestDNS(t *testing.T) {
+	ctx := context.Background()
 	s := initializeService()
 
 	err := s.AddRecords(context.Background(), record1, record2)
@@ -22,7 +23,7 @@ func TestDNS(t *testing.T) {
 		m := new(dns.Msg)
 		wants := "not.a.dom.ain.	3600	IN	A	192.168.0.10"
 
-		s.AnswerDNS(input, m)
+		s.AnswerDNS(ctx, input, m)
 
 		if len(m.Answer) != 1 {
 			t.Errorf("unexpected answers list length: wanted %v ; got %v", 1, len(m.Answer))

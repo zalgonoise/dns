@@ -32,6 +32,7 @@ func httpServer(fn http.HandlerFunc) *http.Server {
 }
 
 func TestStore(t *testing.T) {
+	ctx := context.Background()
 	t.Run("Healthy", func(t *testing.T) {
 		wants := &health.StoreReport{
 			Status:   health.Healthy,
@@ -41,7 +42,7 @@ func TestStore(t *testing.T) {
 
 		h := New()
 
-		report := h.Store(2, 2*time.Millisecond)
+		report := h.Store(ctx, 2, 2*time.Millisecond)
 
 		if !reflect.DeepEqual(wants, report) {
 			t.Errorf("output mismatch error: wanted %v ; got %v", wants, report)
@@ -57,7 +58,7 @@ func TestStore(t *testing.T) {
 
 		h := New()
 
-		report := h.Store(0, 0)
+		report := h.Store(ctx, 0, 0)
 
 		if !reflect.DeepEqual(wants, report) {
 			t.Errorf("output mismatch error: wanted %v ; got %v", wants, report)
@@ -73,7 +74,7 @@ func TestStore(t *testing.T) {
 
 		h := New()
 
-		report := h.Store(0, 2*time.Millisecond)
+		report := h.Store(ctx, 0, 2*time.Millisecond)
 
 		if !reflect.DeepEqual(wants, report) {
 			t.Errorf("output mismatch error: wanted %v ; got %v", wants, report)
@@ -83,6 +84,7 @@ func TestStore(t *testing.T) {
 }
 
 func TestDNS(t *testing.T) {
+	ctx := context.Background()
 	t.Run("Healthy", func(t *testing.T) {
 		wants := &health.DNSReport{
 			Enabled: true,
@@ -90,7 +92,7 @@ func TestDNS(t *testing.T) {
 		}
 		h := New()
 
-		report := h.DNS("1.1.1.1:53", "8.8.8.8:53", store.New().Type(store.TypeA.String()).Name("google.com").Build())
+		report := h.DNS(ctx, "1.1.1.1:53", "8.8.8.8:53", store.New().Type(store.TypeA.String()).Name("google.com").Build())
 
 		if report.LocalQuery == 0 || report.ExternalQuery == 0 {
 			t.Errorf("DNS queries must take time to complete, and cannot be zero")
@@ -110,7 +112,7 @@ func TestDNS(t *testing.T) {
 		}
 		h := New()
 
-		report := h.DNS("1.1.1.1", "8.8.8.8:53", store.New().Type(store.TypeA.String()).Name("google.com").Build())
+		report := h.DNS(ctx, "1.1.1.1", "8.8.8.8:53", store.New().Type(store.TypeA.String()).Name("google.com").Build())
 
 		if report.LocalQuery == 0 || report.ExternalQuery == 0 {
 			t.Errorf("DNS queries must take time to complete, and cannot be zero")
@@ -130,7 +132,7 @@ func TestDNS(t *testing.T) {
 		}
 		h := New()
 
-		report := h.DNS("1.1.1.1:53", "", nil)
+		report := h.DNS(ctx, "1.1.1.1:53", "", nil)
 
 		if !reflect.DeepEqual(wants, report) {
 			t.Errorf("output mismatch error: wanted %v ; got %v", wants, report)
@@ -139,6 +141,7 @@ func TestDNS(t *testing.T) {
 }
 
 func TestHTTP(t *testing.T) {
+	ctx := context.Background()
 	s200 := httpServer(mock200)
 	go func() {
 		err := s200.ListenAndServe()
@@ -154,7 +157,7 @@ func TestHTTP(t *testing.T) {
 		}
 
 		h := New()
-		report := h.HTTP(48052)
+		report := h.HTTP(ctx, 48052)
 
 		if report.Query == 0 {
 			t.Errorf("expected query to take time to complete, cannot be zero")
@@ -188,7 +191,7 @@ func TestHTTP(t *testing.T) {
 		}
 
 		h := New()
-		report := h.HTTP(48052)
+		report := h.HTTP(ctx, 48052)
 
 		if report.Query == 0 {
 			t.Errorf("expected query to take time to complete, cannot be zero")
@@ -212,7 +215,7 @@ func TestHTTP(t *testing.T) {
 		}
 
 		h := New()
-		report := h.HTTP(48052)
+		report := h.HTTP(ctx, 48052)
 
 		if report.Query == 0 {
 			t.Errorf("expected query to take time to complete, cannot be zero")
@@ -227,11 +230,13 @@ func TestHTTP(t *testing.T) {
 }
 
 func TestMerge(t *testing.T) {
+	ctx := context.Background()
 	t.Run("Healthy", func(t *testing.T) {
 		wants := health.Healthy
 
 		h := New()
 		report := h.Merge(
+			ctx,
 			&health.StoreReport{
 				Status: health.Healthy,
 			},
@@ -252,6 +257,7 @@ func TestMerge(t *testing.T) {
 
 		h := New()
 		report := h.Merge(
+			ctx,
 			&health.StoreReport{
 				Status: health.Healthy,
 			},
@@ -272,6 +278,7 @@ func TestMerge(t *testing.T) {
 
 		h := New()
 		report := h.Merge(
+			ctx,
 			&health.StoreReport{
 				Status: health.Healthy,
 			},

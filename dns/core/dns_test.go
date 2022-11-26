@@ -1,6 +1,7 @@
 package core
 
 import (
+	"context"
 	"regexp"
 	"strings"
 	"testing"
@@ -17,13 +18,14 @@ const (
 )
 
 func TestAnswer(t *testing.T) {
+	ctx := context.Background()
 	core := New()
 
 	t.Run("Success", func(t *testing.T) {
 		r := store.New().Name(testName).Type(testType).Addr(testAddr).Build()
 		m := new(dns.Msg)
 
-		core.Answer(r, m)
+		core.Answer(ctx, r, m)
 
 		if len(m.Answer) != 1 {
 			t.Errorf("unexpected answer length: wanted %v ; got %v", 1, len(m.Answer))
@@ -42,6 +44,7 @@ func TestAnswer(t *testing.T) {
 }
 
 func TestFallback(t *testing.T) {
+	ctx := context.Background()
 	core := New()
 	addrRgx := regexp.MustCompile(`([\d]+?\.){3}[\d]+`)
 
@@ -49,7 +52,7 @@ func TestFallback(t *testing.T) {
 		r := store.New().Name(testRealDomain).Type(testType).Build()
 		m := new(dns.Msg)
 
-		core.Fallback(r, m)
+		core.Fallback(ctx, r, m)
 
 		if len(m.Answer) == 0 {
 			t.Errorf("unexpected answer length: wanted >%v ; got %v", 0, len(m.Answer))
@@ -69,7 +72,7 @@ func TestFallback(t *testing.T) {
 		r := store.New().Name(testName).Type(testType).Build()
 		m := new(dns.Msg)
 
-		core.Fallback(r, m)
+		core.Fallback(ctx, r, m)
 
 		if len(m.Answer) != 0 {
 			t.Errorf("unexpected answer length: wanted %v ; got %v", 0, len(m.Answer))

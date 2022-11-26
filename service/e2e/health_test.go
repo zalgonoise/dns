@@ -9,6 +9,7 @@ import (
 )
 
 func TestHealth(t *testing.T) {
+	ctx := context.Background()
 	s := initializeService()
 
 	err := s.AddRecords(context.Background(), record1, record2)
@@ -18,7 +19,7 @@ func TestHealth(t *testing.T) {
 	}
 
 	t.Run("StoreHealth", func(t *testing.T) {
-		report := s.StoreHealth()
+		report := s.StoreHealth(ctx)
 		wants := &health.StoreReport{
 			Len:    2,
 			Status: health.Healthy,
@@ -40,7 +41,7 @@ func TestHealth(t *testing.T) {
 	})
 
 	t.Run("DNSHealth", func(t *testing.T) {
-		report := s.DNSHealth()
+		report := s.DNSHealth(ctx)
 		wants := &health.DNSReport{
 			Enabled: false,
 			Status:  health.Unhealthy,
@@ -67,7 +68,7 @@ func TestHealth(t *testing.T) {
 	})
 
 	t.Run("HTTPHealth", func(t *testing.T) {
-		report := s.HTTPHealth()
+		report := s.HTTPHealth(ctx)
 		wants := &health.HTTPReport{
 			Status: health.Stopped,
 		}
@@ -88,7 +89,7 @@ func TestHealth(t *testing.T) {
 	})
 
 	t.Run("Health", func(t *testing.T) {
-		report := s.Health()
+		report := s.Health(ctx)
 		wantsStore := &health.StoreReport{
 			Len:    2,
 			Status: health.Healthy,

@@ -10,21 +10,21 @@ import (
 )
 
 // StoreHealth uses the health.Repository to generate a health.StoreReport
-func (s *service) StoreHealth() *health.StoreReport {
+func (s *service) StoreHealth(ctx context.Context) *health.StoreReport {
 	before := time.Now()
-	r, err := s.store.List(context.Background())
+	r, err := s.store.List(ctx)
 	after := time.Since(before)
 	if err != nil {
-		return s.health.Store(0, 0)
+		return s.health.Store(ctx, 0, 0)
 	}
-	return s.health.Store(len(r), after)
+	return s.health.Store(ctx, len(r), after)
 }
 
 // DNSHealth uses the health.Repository to generate a health.DNSReport
-func (s *service) DNSHealth() *health.DNSReport {
+func (s *service) DNSHealth(ctx context.Context) *health.DNSReport {
 	var addr string
 
-	r, err := s.store.List(context.Background())
+	r, err := s.store.List(ctx)
 	if err != nil || len(r) == 0 {
 		r = []*store.Record{nil}
 	}
@@ -34,6 +34,7 @@ func (s *service) DNSHealth() *health.DNSReport {
 	}
 
 	return s.health.DNS(
+		ctx,
 		s.conf.DNS.Address,
 		addr,
 		r[0],
@@ -42,15 +43,16 @@ func (s *service) DNSHealth() *health.DNSReport {
 }
 
 // HTTPHealth uses the health.Repository to generate a health.HTTPReport
-func (s *service) HTTPHealth() *health.HTTPReport {
-	return s.health.HTTP(s.conf.HTTP.Port)
+func (s *service) HTTPHealth(ctx context.Context) *health.HTTPReport {
+	return s.health.HTTP(ctx, s.conf.HTTP.Port)
 }
 
 // Health uses the health.Repository to generate a health.Report
-func (s *service) Health() *health.Report {
+func (s *service) Health(ctx context.Context) *health.Report {
 	return s.health.Merge(
-		s.StoreHealth(),
-		s.DNSHealth(),
-		s.HTTPHealth(),
+		ctx,
+		s.StoreHealth(ctx),
+		s.DNSHealth(ctx),
+		s.HTTPHealth(ctx),
 	)
 }

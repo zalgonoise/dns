@@ -230,12 +230,12 @@ func (s *LoggedService) DeleteRecord(ctx context.Context, r *store.Record) error
 
 // AnswerDNS uses the dns.Repository to reply to the dns.Msg `m` with the answer
 // in store.Record `r`
-func (s *LoggedService) AnswerDNS(r *store.Record, m *dnsr.Msg) {
+func (s *LoggedService) AnswerDNS(ctx context.Context, r *store.Record, m *dnsr.Msg) {
 	s.logger.Debug("AnswerDNS request",
 		attr.String("module", "service:dns:answer"),
 	)
 
-	s.svc.AnswerDNS(r, m)
+	s.svc.AnswerDNS(ctx, r, m)
 	go func() {
 		time.Sleep(5 * time.Millisecond)
 		s.logger.Debug("AnswerDNS response",
@@ -248,12 +248,12 @@ func (s *LoggedService) AnswerDNS(r *store.Record, m *dnsr.Msg) {
 }
 
 // StoreHealth uses the health.Repository to generate a health.StoreReport
-func (s *LoggedService) StoreHealth() *health.StoreReport {
+func (s *LoggedService) StoreHealth(ctx context.Context) *health.StoreReport {
 	s.logger.Debug("StoreHealth request",
 		attr.String("module", "service:health:store"),
 	)
 
-	r := s.svc.StoreHealth()
+	r := s.svc.StoreHealth(ctx)
 	go func() {
 		time.Sleep(5 * time.Millisecond)
 		s.logger.Debug("StoreHealth response",
@@ -267,12 +267,12 @@ func (s *LoggedService) StoreHealth() *health.StoreReport {
 }
 
 // DNSHealth uses the health.Repository to generate a health.DNSReport
-func (s *LoggedService) DNSHealth() *health.DNSReport {
+func (s *LoggedService) DNSHealth(ctx context.Context) *health.DNSReport {
 	s.logger.Debug("DNSHealth request",
 		attr.String("module", "service:health:dns"),
 	)
 
-	r := s.svc.DNSHealth()
+	r := s.svc.DNSHealth(ctx)
 	go func() {
 		time.Sleep(5 * time.Millisecond)
 		s.logger.Debug("DNSHealth response",
@@ -286,12 +286,12 @@ func (s *LoggedService) DNSHealth() *health.DNSReport {
 }
 
 // HTTPHealth uses the health.Repository to generate a health.HTTPReport
-func (s *LoggedService) HTTPHealth() *health.HTTPReport {
+func (s *LoggedService) HTTPHealth(ctx context.Context) *health.HTTPReport {
 	s.logger.Debug("HTTPHealth request",
 		attr.String("module", "service:health:http"),
 	)
 
-	r := s.svc.HTTPHealth()
+	r := s.svc.HTTPHealth(ctx)
 	go func() {
 		time.Sleep(5 * time.Millisecond)
 		s.logger.Debug("HTTPHealth response",
@@ -305,12 +305,12 @@ func (s *LoggedService) HTTPHealth() *health.HTTPReport {
 }
 
 // Health uses the health.Repository to generate a health.Report
-func (s *LoggedService) Health() *health.Report {
+func (s *LoggedService) Health(ctx context.Context) *health.Report {
 	s.logger.Debug("MergeHealth request",
 		attr.String("module", "service:health"),
 	)
 
-	r := s.svc.Health()
+	r := s.svc.Health(ctx)
 	go func() {
 		time.Sleep(5 * time.Millisecond)
 		s.logger.Debug("MergeHealth response",
