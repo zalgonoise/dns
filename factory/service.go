@@ -1,6 +1,7 @@
 package factory
 
 import (
+	"io"
 	"os"
 
 	"github.com/zalgonoise/dns/cmd/config"
@@ -9,9 +10,25 @@ import (
 	"github.com/zalgonoise/dns/service"
 	svclog "github.com/zalgonoise/dns/service/middleware/logger"
 	"github.com/zalgonoise/dns/store"
-	"github.com/zalgonoise/zlog/log"
-	"github.com/zalgonoise/zlog/store/fs"
+	"github.com/zalgonoise/logx"
+	"github.com/zalgonoise/logx/handlers/jsonh"
+	"github.com/zalgonoise/logx/handlers/texth"
 )
+
+func writerFromPath(path string) io.Writer {
+	confFile, err := os.Open(path)
+	if err != nil {
+		newFile, err := os.Create(path)
+		if err != nil {
+			return os.Stderr
+		}
+		if err := newFile.Sync(); err != nil {
+			return os.Stderr
+		}
+		return newFile
+	}
+	return confFile
+}
 
 func Service(
 	dnsRepo dns.Repository,
@@ -20,9 +37,10 @@ func Service(
 	conf *config.Config,
 ) service.Service {
 	var (
-		svc     service.Service = service.New(dnsRepo, storeRepo, healthRepo, conf)
-		logConf log.LoggerConfig
-		logger  log.Logger
+		svc    service.Service = service.New(dnsRepo, storeRepo, healthRepo, conf)
+		writer io.Writer       = os.Stderr
+
+		logger logx.Logger
 	)
 
 	// short-circuit out
@@ -31,49 +49,14 @@ func Service(
 	}
 
 	if conf.Logger.Path != "" {
-		_, err := os.Open(conf.Logger.Path)
-		switch err {
-		case nil:
-			f, err := fs.New(conf.Logger.Path)
-			if err == nil {
-				logConf = log.WithOut(f, os.Stderr)
-			}
-		default:
-			fsf, err := os.Create(conf.Logger.Path)
-			if err == nil {
-				err = fsf.Sync()
-				if err == nil {
-					f, err := fs.New(conf.Logger.Path)
-					if err == nil {
-						logConf = log.WithOut(f, os.Stderr)
-					}
-				}
-
-			}
-		}
+		writer = writerFromPath(conf.Logger.Path)
 	}
 
 	switch conf.Logger.Type {
 	case "text":
-		logger = log.New(
-			log.CfgTextColorLevelFirst,
-			logConf,
-		)
+		logger = logx.New(texth.New(writer))
 	case "json":
-		logger = log.New(
-			log.CfgFormatJSON,
-			logConf,
-		)
-	case "csv":
-		logger = log.New(
-			log.CfgFormatCSV,
-			logConf,
-		)
-	case "xml":
-		logger = log.New(
-			log.CfgFormatXML,
-			logConf,
-		)
+		logger = logx.New(jsonh.New(writer))
 	default:
 		logger = nil
 	}

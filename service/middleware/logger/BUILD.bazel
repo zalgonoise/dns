@@ -10,7 +10,7 @@ go_library(
         "//service",
         "//store",
         "@com_github_miekg_dns//:dns",
-        "@com_github_zalgonoise_zlog//log",
-        "@com_github_zalgonoise_zlog//log/event",
+        "@com_github_zalgonoise_logx//:go_default_library",
+        "@com_github_zalgonoise_logx//attr:go_default_library",
     ],
 )

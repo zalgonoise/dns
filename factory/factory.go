@@ -6,7 +6,8 @@ import (
 
 	"github.com/zalgonoise/dns/cmd/config"
 	"github.com/zalgonoise/dns/transport/httpapi"
-	"github.com/zalgonoise/zlog/log"
+	"github.com/zalgonoise/logx"
+	"github.com/zalgonoise/logx/attr"
 )
 
 func From(conf *config.Config) httpapi.Server {
@@ -50,7 +51,9 @@ func From(conf *config.Config) httpapi.Server {
 		go func() {
 			err := udps.Start()
 			if err != nil {
-				log.Fatalf("error starting DNS server: %v", err)
+				logx.Fatal("error starting DNS server",
+					attr.String("error", err.Error()),
+				)
 				os.Exit(1)
 			}
 		}()
