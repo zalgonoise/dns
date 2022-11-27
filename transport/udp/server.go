@@ -1,6 +1,8 @@
 package udp
 
-import "errors"
+import (
+	"errors"
+)
 
 var (
 	ErrAlreadyRunning error = errors.New("DNS server is already running")
