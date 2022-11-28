@@ -9,7 +9,11 @@ go_library(
     ],
     importpath = "github.com/zalgonoise/dns/store/memmap",
     visibility = ["//visibility:public"],
-    deps = ["//store"],
+    deps = [
+        "//store",
+        "@com_github_zalgonoise_logx//:logx",
+        "@com_github_zalgonoise_logx//attr",
+    ],
 )
 
 go_test(

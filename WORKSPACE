@@ -3353,6 +3353,6 @@ container_pull(
 go_repository(
     name = "com_github_zalgonoise_logx",
     importpath = "github.com/zalgonoise/logx",
-    sum = "h1:ZNPnoXvbaOdPMmKK1Zmp36YyQSsxCpDljS5hiJLHo24=",
-    version = "v0.0.0-20221126153808-6da322918f5d",
+    sum = "h1:e4EOAJtheSX4Os90MgjTZA8eUSH5zNsQGe3lQqLdDyU=",
+    version = "v0.0.0-20221128200033-709cc6ffd362",
 )

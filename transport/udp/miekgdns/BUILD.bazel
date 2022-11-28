@@ -5,6 +5,7 @@ go_library(
     srcs = [
         "dns.go",
         "handler.go",
+        "helper.go",
         "server.go",
     ],
     importpath = "github.com/zalgonoise/dns/transport/udp/miekgdns",
@@ -13,6 +14,9 @@ go_library(
         "//service",
         "//store",
         "//transport/udp",
+        "@com_github_google_uuid//:uuid",
         "@com_github_miekg_dns//:dns",
+        "@com_github_zalgonoise_logx//:logx",
+        "@com_github_zalgonoise_logx//attr",
     ],
 )
