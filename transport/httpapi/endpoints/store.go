@@ -1,16 +1,20 @@
 package endpoints
 
 import (
-	"context"
 	"io"
 	"net/http"
 
 	"github.com/zalgonoise/dns/store"
 	"github.com/zalgonoise/dns/transport/httpapi"
+	"github.com/zalgonoise/logx"
+	"github.com/zalgonoise/logx/attr"
 )
 
 func (e *endpoints) AddRecord(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background()
+	ctx := e.newCtx("http:records:add",
+		attr.String("remote_addr", r.RemoteAddr),
+		attr.String("user_agent", r.UserAgent()),
+	)
 
 	b, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -21,6 +25,7 @@ func (e *endpoints) AddRecord(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Warn(httpapi.ErrInvalidBody.Error(), attr.String("error", err.Error()))
 		return
 	}
 
@@ -34,6 +39,7 @@ func (e *endpoints) AddRecord(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Warn(httpapi.ErrInvalidJSON.Error(), attr.String("error", err.Error()))
 		return
 	}
 
@@ -46,6 +52,7 @@ func (e *endpoints) AddRecord(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Error(httpapi.ErrInternal.Error(), attr.String("error", err.Error()))
 		return
 	}
 
@@ -58,6 +65,7 @@ func (e *endpoints) AddRecord(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Error(httpapi.ErrInternal.Error(), attr.String("error", err.Error()))
 		return
 	}
 
@@ -68,9 +76,13 @@ func (e *endpoints) AddRecord(w http.ResponseWriter, r *http.Request) {
 		Record:  out,
 	})
 	_, _ = w.Write(response)
+	logx.From(ctx).Debug("added record successfully")
 }
 func (e *endpoints) ListRecords(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background()
+	ctx := e.newCtx("http:records:list",
+		attr.String("remote_addr", r.RemoteAddr),
+		attr.String("user_agent", r.UserAgent()),
+	)
 
 	records, err := e.s.ListRecords(ctx)
 	if err != nil {
@@ -81,6 +93,7 @@ func (e *endpoints) ListRecords(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Error(httpapi.ErrInternal.Error(), attr.String("error", err.Error()))
 		return
 	}
 
@@ -96,9 +109,13 @@ func (e *endpoints) ListRecords(w http.ResponseWriter, r *http.Request) {
 		Records: &out,
 	})
 	_, _ = w.Write(response)
+	logx.From(ctx).Debug("listed all records", attr.Int("len", len(out)))
 }
 func (e *endpoints) GetRecordByDomain(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background()
+	ctx := e.newCtx("http:records:get",
+		attr.String("remote_addr", r.RemoteAddr),
+		attr.String("user_agent", r.UserAgent()),
+	)
 
 	b, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -109,6 +126,7 @@ func (e *endpoints) GetRecordByDomain(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Warn(httpapi.ErrInvalidBody.Error(), attr.String("error", err.Error()))
 		return
 	}
 
@@ -122,6 +140,7 @@ func (e *endpoints) GetRecordByDomain(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Warn(httpapi.ErrInvalidJSON.Error(), attr.String("error", err.Error()))
 		return
 	}
 
@@ -134,6 +153,7 @@ func (e *endpoints) GetRecordByDomain(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Error(httpapi.ErrInternal.Error(), attr.String("error", err.Error()))
 		return
 	}
 
@@ -144,10 +164,14 @@ func (e *endpoints) GetRecordByDomain(w http.ResponseWriter, r *http.Request) {
 		Record:  out,
 	})
 	_, _ = w.Write(response)
+	logx.From(ctx).Debug("fetched record for domain", attr.String("domain", record.Name))
 }
 
 func (e *endpoints) GetRecordByAddress(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background()
+	ctx := e.newCtx("http:records:list",
+		attr.String("remote_addr", r.RemoteAddr),
+		attr.String("user_agent", r.UserAgent()),
+	)
 
 	b, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -158,6 +182,7 @@ func (e *endpoints) GetRecordByAddress(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Warn(httpapi.ErrInvalidBody.Error(), attr.String("error", err.Error()))
 		return
 	}
 
@@ -171,6 +196,7 @@ func (e *endpoints) GetRecordByAddress(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Warn(httpapi.ErrInvalidJSON.Error(), attr.String("error", err.Error()))
 		return
 	}
 
@@ -183,6 +209,7 @@ func (e *endpoints) GetRecordByAddress(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Error(httpapi.ErrInternal.Error(), attr.String("error", err.Error()))
 		return
 	}
 
@@ -198,9 +225,13 @@ func (e *endpoints) GetRecordByAddress(w http.ResponseWriter, r *http.Request) {
 		Records: &out,
 	})
 	_, _ = w.Write(response)
+	logx.From(ctx).Debug("listed records for address", attr.String("address", record.Addr), attr.Int("len", len(out)))
 }
 func (e *endpoints) UpdateRecord(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background()
+	ctx := e.newCtx("http:records:update",
+		attr.String("remote_addr", r.RemoteAddr),
+		attr.String("user_agent", r.UserAgent()),
+	)
 
 	b, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -211,6 +242,7 @@ func (e *endpoints) UpdateRecord(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Warn(httpapi.ErrInvalidBody.Error(), attr.String("error", err.Error()))
 		return
 	}
 
@@ -224,6 +256,7 @@ func (e *endpoints) UpdateRecord(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Warn(httpapi.ErrInvalidJSON.Error(), attr.String("error", err.Error()))
 		return
 	}
 
@@ -236,6 +269,7 @@ func (e *endpoints) UpdateRecord(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Error(httpapi.ErrInternal.Error(), attr.String("error", err.Error()))
 		return
 	}
 	out, err := e.s.GetRecordByTypeAndDomain(ctx, rwt.Record.Type, rwt.Record.Name)
@@ -247,6 +281,7 @@ func (e *endpoints) UpdateRecord(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Error(httpapi.ErrInternal.Error(), attr.String("error", err.Error()))
 		return
 	}
 
@@ -257,9 +292,13 @@ func (e *endpoints) UpdateRecord(w http.ResponseWriter, r *http.Request) {
 		Record:  out,
 	})
 	_, _ = w.Write(response)
+	logx.From(ctx).Debug("updated record successfully")
 }
 func (e *endpoints) DeleteRecord(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background()
+	ctx := e.newCtx("http:records:delete",
+		attr.String("remote_addr", r.RemoteAddr),
+		attr.String("user_agent", r.UserAgent()),
+	)
 
 	b, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -270,6 +309,7 @@ func (e *endpoints) DeleteRecord(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Warn(httpapi.ErrInvalidBody.Error(), attr.String("error", err.Error()))
 		return
 	}
 
@@ -283,6 +323,7 @@ func (e *endpoints) DeleteRecord(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Warn(httpapi.ErrInvalidJSON.Error(), attr.String("error", err.Error()))
 		return
 	}
 
@@ -295,6 +336,7 @@ func (e *endpoints) DeleteRecord(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Error(httpapi.ErrInternal.Error(), attr.String("error", err.Error()))
 		return
 	}
 
@@ -304,4 +346,5 @@ func (e *endpoints) DeleteRecord(w http.ResponseWriter, r *http.Request) {
 		Message: "record deleted successfully",
 	})
 	_, _ = w.Write(response)
+	logx.From(ctx).Debug("record deleted successfully")
 }

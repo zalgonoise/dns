@@ -1,14 +1,18 @@
 package endpoints
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/zalgonoise/dns/transport/httpapi"
+	"github.com/zalgonoise/logx"
+	"github.com/zalgonoise/logx/attr"
 )
 
 func (e *endpoints) Health(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background()
+	ctx := e.newCtx("http:health:get",
+		attr.String("remote_addr", r.RemoteAddr),
+		attr.String("user_agent", r.UserAgent()),
+	)
 	out := e.s.Health(ctx)
 
 	w.WriteHeader(200)
@@ -17,4 +21,5 @@ func (e *endpoints) Health(w http.ResponseWriter, r *http.Request) {
 		Report:  out,
 	})
 	_, _ = w.Write(response)
+	logx.From(ctx).Debug("successful status report response")
 }

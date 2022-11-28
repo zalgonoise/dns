@@ -4,13 +4,21 @@ import (
 	"net/http"
 
 	"github.com/zalgonoise/dns/transport/httpapi"
+	"github.com/zalgonoise/logx"
+	"github.com/zalgonoise/logx/attr"
 )
 
 func (e *endpoints) StartDNS(w http.ResponseWriter, r *http.Request) {
-	var err error
+	var (
+		err error
+		ctx = e.newCtx("http:dns:start",
+			attr.String("remote_addr", r.RemoteAddr),
+			attr.String("user_agent", r.UserAgent()),
+		)
+	)
 
 	go func() {
-		err = e.UDP.Start()
+		err = e.UDP.Start(ctx)
 	}()
 
 	if err != nil {
@@ -21,6 +29,7 @@ func (e *endpoints) StartDNS(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Error("failed to start DNS server", attr.String("error", err.Error()))
 		return
 	}
 	w.WriteHeader(200)
@@ -29,10 +38,15 @@ func (e *endpoints) StartDNS(w http.ResponseWriter, r *http.Request) {
 		Message: "started DNS server",
 	})
 	_, _ = w.Write(response)
+	logx.From(ctx).Debug("started DNS server")
 }
 
 func (e *endpoints) StopDNS(w http.ResponseWriter, r *http.Request) {
-	err := e.UDP.Stop()
+	var ctx = e.newCtx("http:dns:stop",
+		attr.String("remote_addr", r.RemoteAddr),
+		attr.String("user_agent", r.UserAgent()),
+	)
+	err := e.UDP.Stop(ctx)
 	if err != nil {
 		w.WriteHeader(500)
 		response, _ := e.enc.Encode(httpapi.DNSResponse{
@@ -41,6 +55,7 @@ func (e *endpoints) StopDNS(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Error("failed to stop DNS server", attr.String("error", err.Error()))
 		return
 	}
 	w.WriteHeader(200)
@@ -49,10 +64,15 @@ func (e *endpoints) StopDNS(w http.ResponseWriter, r *http.Request) {
 		Message: "stopped DNS server",
 	})
 	_, _ = w.Write(response)
+	logx.From(ctx).Debug("stopped DNS server")
 }
 
 func (e *endpoints) ReloadDNS(w http.ResponseWriter, r *http.Request) {
-	err := e.UDP.Stop()
+	var ctx = e.newCtx("http:dns:reload",
+		attr.String("remote_addr", r.RemoteAddr),
+		attr.String("user_agent", r.UserAgent()),
+	)
+	err := e.UDP.Stop(ctx)
 	if err != nil {
 		w.WriteHeader(500)
 		response, _ := e.enc.Encode(httpapi.DNSResponse{
@@ -61,11 +81,12 @@ func (e *endpoints) ReloadDNS(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Error("failed to stop DNS server", attr.String("error", err.Error()))
 		return
 	}
 
 	go func() {
-		err = e.UDP.Start()
+		err = e.UDP.Start(ctx)
 	}()
 
 	if err != nil {
@@ -76,6 +97,7 @@ func (e *endpoints) ReloadDNS(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		})
 		_, _ = w.Write(response)
+		logx.From(ctx).Error("failed to start DNS server", attr.String("error", err.Error()))
 		return
 	}
 	w.WriteHeader(200)
@@ -84,4 +106,5 @@ func (e *endpoints) ReloadDNS(w http.ResponseWriter, r *http.Request) {
 		Message: "reloaded DNS server",
 	})
 	_, _ = w.Write(response)
+	logx.From(ctx).Debug("started DNS server")
 }
