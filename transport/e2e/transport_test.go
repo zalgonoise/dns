@@ -21,6 +21,8 @@ import (
 
 	"github.com/miekg/dns"
 	testcontainers "github.com/testcontainers/testcontainers-go"
+
+	// testcontainers "github.com/testcontainers/testcontainers-go"
 	"github.com/zalgonoise/dns/health"
 	"github.com/zalgonoise/dns/store"
 	"github.com/zalgonoise/dns/transport/httpapi"
