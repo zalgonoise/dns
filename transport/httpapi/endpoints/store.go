@@ -15,6 +15,7 @@ func (e *endpoints) AddRecord(w http.ResponseWriter, r *http.Request) {
 		attr.String("remote_addr", r.RemoteAddr),
 		attr.String("user_agent", r.UserAgent()),
 	)
+	logx.From(ctx).Debug("/records/add request")
 
 	b, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -83,6 +84,7 @@ func (e *endpoints) ListRecords(w http.ResponseWriter, r *http.Request) {
 		attr.String("remote_addr", r.RemoteAddr),
 		attr.String("user_agent", r.UserAgent()),
 	)
+	logx.From(ctx).Debug("/records request")
 
 	records, err := e.s.ListRecords(ctx)
 	if err != nil {
@@ -116,6 +118,7 @@ func (e *endpoints) GetRecordByDomain(w http.ResponseWriter, r *http.Request) {
 		attr.String("remote_addr", r.RemoteAddr),
 		attr.String("user_agent", r.UserAgent()),
 	)
+	logx.From(ctx).Debug("/records/getAddress request")
 
 	b, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -172,6 +175,7 @@ func (e *endpoints) GetRecordByAddress(w http.ResponseWriter, r *http.Request) {
 		attr.String("remote_addr", r.RemoteAddr),
 		attr.String("user_agent", r.UserAgent()),
 	)
+	logx.From(ctx).Debug("/records/getDomains request")
 
 	b, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -232,6 +236,7 @@ func (e *endpoints) UpdateRecord(w http.ResponseWriter, r *http.Request) {
 		attr.String("remote_addr", r.RemoteAddr),
 		attr.String("user_agent", r.UserAgent()),
 	)
+	logx.From(ctx).Debug("/records/update request")
 
 	b, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -299,6 +304,7 @@ func (e *endpoints) DeleteRecord(w http.ResponseWriter, r *http.Request) {
 		attr.String("remote_addr", r.RemoteAddr),
 		attr.String("user_agent", r.UserAgent()),
 	)
+	logx.From(ctx).Debug("/records/delete request")
 
 	b, err := io.ReadAll(r.Body)
 	if err != nil {

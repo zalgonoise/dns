@@ -13,6 +13,8 @@ func (e *endpoints) Health(w http.ResponseWriter, r *http.Request) {
 		attr.String("remote_addr", r.RemoteAddr),
 		attr.String("user_agent", r.UserAgent()),
 	)
+	logx.From(ctx).Debug("/health request")
+
 	out := e.s.Health(ctx)
 
 	w.WriteHeader(200)

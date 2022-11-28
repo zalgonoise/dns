@@ -16,6 +16,7 @@ func (e *endpoints) StartDNS(w http.ResponseWriter, r *http.Request) {
 			attr.String("user_agent", r.UserAgent()),
 		)
 	)
+	logx.From(ctx).Debug("/dns/start request")
 
 	go func() {
 		err = e.UDP.Start(ctx)
@@ -46,6 +47,8 @@ func (e *endpoints) StopDNS(w http.ResponseWriter, r *http.Request) {
 		attr.String("remote_addr", r.RemoteAddr),
 		attr.String("user_agent", r.UserAgent()),
 	)
+	logx.From(ctx).Debug("/dns/stop request")
+
 	err := e.UDP.Stop(ctx)
 	if err != nil {
 		w.WriteHeader(500)
@@ -72,6 +75,8 @@ func (e *endpoints) ReloadDNS(w http.ResponseWriter, r *http.Request) {
 		attr.String("remote_addr", r.RemoteAddr),
 		attr.String("user_agent", r.UserAgent()),
 	)
+	logx.From(ctx).Debug("/dns/reload request")
+
 	err := e.UDP.Stop(ctx)
 	if err != nil {
 		w.WriteHeader(500)

@@ -22,6 +22,7 @@ func (u *udps) Start(ctx context.Context) error {
 	u.on = true
 
 	logx.From(ctx).Debug("starting UDP server", attr.New("config", []attr.Attr{
+		attr.String("action", "dns:start"),
 		attr.String("address", u.conf.Addr),
 		attr.String("protocol", u.conf.Proto),
 	}))
@@ -36,6 +37,7 @@ func (u *udps) Stop(ctx context.Context) error {
 	}
 
 	logx.From(ctx).Debug("stopping UDP server", attr.New("config", []attr.Attr{
+		attr.String("action", "dns:stop"),
 		attr.String("address", u.conf.Addr),
 		attr.String("protocol", u.conf.Proto),
 	}))
