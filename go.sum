@@ -680,6 +680,8 @@ github.com/zalgonoise/logx v0.0.0-20221126153808-6da322918f5d h1:ZNPnoXvbaOdPMmK
 github.com/zalgonoise/logx v0.0.0-20221126153808-6da322918f5d/go.mod h1:ZP1D2HrYAkzTrr6BSYtOLYtTX7qLpdKfeQV0vRPvmS8=
 github.com/zalgonoise/logx v0.0.0-20221128000759-6da4a6a540ea h1:rAAaIF6UwHUXyaBck1rAoaRO92WeA3TpriHMS8PI8qk=
 github.com/zalgonoise/logx v0.0.0-20221128000759-6da4a6a540ea/go.mod h1:ZP1D2HrYAkzTrr6BSYtOLYtTX7qLpdKfeQV0vRPvmS8=
+github.com/zalgonoise/logx v0.0.0-20221128200033-709cc6ffd362 h1:e4EOAJtheSX4Os90MgjTZA8eUSH5zNsQGe3lQqLdDyU=
+github.com/zalgonoise/logx v0.0.0-20221128200033-709cc6ffd362/go.mod h1:ZP1D2HrYAkzTrr6BSYtOLYtTX7qLpdKfeQV0vRPvmS8=
 go.etcd.io/bbolt v1.3.2/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
 go.etcd.io/bbolt v1.3.3/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
 go.etcd.io/bbolt v1.3.5/go.mod h1:G5EMThwa9y8QZGBClrRx5EY+Yw9kAhnjy3bSjsnlVTQ=
