@@ -7,6 +7,8 @@ import (
 	"os"
 
 	"github.com/zalgonoise/dns/store"
+	"github.com/zalgonoise/logx"
+	"github.com/zalgonoise/logx/attr"
 )
 
 func toEntity(s *Store) []*store.Record {
@@ -69,18 +71,25 @@ inputLoop:
 	return out
 }
 
-func (f *FileStore) sync() error {
+func (f *FileStore) sync(ctx context.Context) error {
+	logx.From(ctx).Debug("syncing records", attr.String("action", "store:sync"))
+
 	rs, err := f.store.List(context.Background())
 	if err != nil {
+		logx.From(ctx).Debug("failed to list records", attr.String("error", err.Error()))
 		return fmt.Errorf("%w: failed to list store records: %v", store.ErrSync, err)
 	}
 	b, err := f.enc.Encode(fromEntity(rs...))
 	if err != nil {
+		logx.From(ctx).Debug("failed to encode records", attr.String("error", err.Error()))
 		return fmt.Errorf("%w: failed to marshal store records to JSON: %v", store.ErrSync, err)
 	}
 	err = os.WriteFile(f.Path, b, fs.FileMode(store.OS_ALL_RW))
 	if err != nil {
+		logx.From(ctx).Debug("failed to write records to file", attr.String("error", err.Error()))
 		return fmt.Errorf("%w: failed to write new reference file: %v", store.ErrSync, err)
 	}
+
+	logx.From(ctx).Debug("synced records successfully")
 	return nil
 }

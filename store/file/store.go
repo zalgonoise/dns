@@ -19,7 +19,7 @@ func (f *FileStore) Create(ctx context.Context, rs ...*store.Record) error {
 	if err != nil {
 		return fmt.Errorf("failed to create record: %w", err)
 	}
-	err = f.sync()
+	err = f.sync(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to sync store to file: %w", err)
 	}
@@ -82,7 +82,7 @@ func (f *FileStore) Update(ctx context.Context, domain string, r *store.Record) 
 	if err != nil {
 		return fmt.Errorf("failed to update record: %w", err)
 	}
-	err = f.sync()
+	err = f.sync(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to sync store to file: %w", err)
 	}
@@ -101,7 +101,7 @@ func (f *FileStore) Delete(ctx context.Context, r *store.Record) error {
 	if err != nil {
 		return fmt.Errorf("failed to delete record: %w", err)
 	}
-	err = f.sync()
+	err = f.sync(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to sync store to file: %w", err)
 	}
