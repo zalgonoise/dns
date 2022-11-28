@@ -32,8 +32,8 @@ func NewServer(conf *udp.DNS, s service.Answering) udp.Server {
 	}
 }
 
-// NewServerWithTrace returns the same UDP server configured with a logger
-func NewServerWithTrace(server udp.Server, logger logx.Logger) udp.Server {
+// WithTrace returns the same UDP server configured with a logger
+func WithTrace(server udp.Server, logger logx.Logger) udp.Server {
 	if server == nil {
 		return nil
 	}

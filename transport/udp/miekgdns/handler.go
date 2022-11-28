@@ -3,7 +3,6 @@ package miekgdns
 import (
 	"context"
 
-	"github.com/google/uuid"
 	"github.com/miekg/dns"
 	"github.com/zalgonoise/dns/store"
 	"github.com/zalgonoise/logx"
@@ -11,15 +10,9 @@ import (
 )
 
 func (u *udps) handleRequest(w dns.ResponseWriter, r *dns.Msg) {
-	var ctx = context.Background()
-	if u.logger != nil {
-		ctx = logx.InContext(
-			ctx, u.logger.With(
-				attr.String("req_id", uuid.New().String()),
-				attr.New("req_data", r.Question),
-			),
-		)
-	}
+	var ctx = u.newCtx("dns:question",
+		attr.String("remote_addr", w.RemoteAddr().String()),
+	)
 
 	m := new(dns.Msg)
 	m.SetReply(r)
@@ -35,9 +28,7 @@ func (u *udps) handleRequest(w dns.ResponseWriter, r *dns.Msg) {
 
 	err := w.WriteMsg(m)
 	if err != nil {
-		if l := logx.From(ctx); l != nil {
-			l.Error("error answering query", attr.String("error", err.Error()))
-		}
+		logx.From(ctx).Error("error answering query", attr.String("error", err.Error()))
 		u.err = err
 	}
 }
@@ -75,14 +66,12 @@ func (u *udps) parseQuery(ctx context.Context, m *dns.Msg) {
 }
 
 func (u *udps) answer(ctx context.Context, r *store.Record, m *dns.Msg) {
-	if l := logx.From(ctx); l != nil {
-		l.Debug("answering question from request",
-			attr.New("data", []attr.Attr{
-				attr.String("name", r.Name),
-				attr.String("type", r.Type),
-			}),
-		)
-	}
+	logx.From(ctx).Debug("answering question from request",
+		attr.New("data", []attr.Attr{
+			attr.String("name", r.Name),
+			attr.String("type", r.Type),
+		}),
+	)
 
 	name := r.Name
 	if r.Name[len(r.Name)-1] == u.conf.Prefix[0] {
