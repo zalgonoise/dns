@@ -6,7 +6,7 @@ require (
 	github.com/goccy/go-json v0.9.11
 	github.com/miekg/dns v1.1.50
 	github.com/testcontainers/testcontainers-go v0.15.0
-	github.com/zalgonoise/logx v0.0.0-20221126153808-6da322918f5d
+	github.com/zalgonoise/logx v0.0.0-20221128000759-6da4a6a540ea
 	gopkg.in/yaml.v2 v2.4.0
 )
 
