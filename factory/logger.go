@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/zalgonoise/logx"
+	"github.com/zalgonoise/logx/handlers"
 	"github.com/zalgonoise/logx/handlers/jsonh"
 	"github.com/zalgonoise/logx/handlers/texth"
 )
@@ -14,10 +15,10 @@ func writerFromPath(path string) io.Writer {
 	if err != nil {
 		newFile, err := os.Create(path)
 		if err != nil {
-			return os.Stderr
+			return nil
 		}
 		if err := newFile.Sync(); err != nil {
-			return os.Stderr
+			return nil
 		}
 		return newFile
 	}
@@ -26,21 +27,39 @@ func writerFromPath(path string) io.Writer {
 
 func Logger(ltype, path string) logx.Logger {
 	var (
-		writer io.Writer = os.Stderr
-		logger           = logx.New(texth.New(writer))
+		defaultHandler = texth.New(os.Stderr)
+		logger         = logx.New(defaultHandler)
 	)
 
 	if path == "" {
 		return logger
 	}
-	writer = writerFromPath(path)
+	fileWriter := writerFromPath(path)
+	if fileWriter == nil {
+		return logger
+	}
 
 	switch ltype {
 	case "text":
-		return logx.New(texth.New(writer))
+		return logx.New(
+			handlers.Multi(
+				texth.New(fileWriter),
+				defaultHandler,
+			),
+		)
 	case "json":
-		return logx.New(jsonh.New(writer))
+		return logx.New(
+			handlers.Multi(
+				jsonh.New(fileWriter),
+				defaultHandler,
+			),
+		)
 	default:
-		return logx.New(texth.New(writer))
+		return logx.New(
+			handlers.Multi(
+				texth.New(fileWriter),
+				defaultHandler,
+			),
+		)
 	}
 }
