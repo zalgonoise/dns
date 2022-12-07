@@ -20,5 +20,5 @@ func StoreRepository(rtype string, path string) store.Repository {
 		storeRepo = memmap.New()
 	}
 
-	return storeRepo
+	return store.WithTrace(storeRepo)
 }

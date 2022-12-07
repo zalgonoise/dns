@@ -14,7 +14,7 @@ func UDPServer(stype, address, prefix, proto string, svc service.Service, logger
 
 	switch stype {
 	case "miekgdns":
-		udps = miekgdns.WithTrace(
+		udps = miekgdns.WithLogger(
 			miekgdns.NewServer(
 				udp.NewDNS().
 					Addr(address).
@@ -26,7 +26,7 @@ func UDPServer(stype, address, prefix, proto string, svc service.Service, logger
 			logger,
 		)
 	default:
-		udps = miekgdns.WithTrace(
+		udps = miekgdns.WithLogger(
 			miekgdns.NewServer(
 				udp.NewDNS().
 					Addr(address).
@@ -39,7 +39,7 @@ func UDPServer(stype, address, prefix, proto string, svc service.Service, logger
 		)
 	}
 
-	return udps
+	return udp.WithTrace(udps)
 }
 
 func Server(
@@ -49,7 +49,7 @@ func Server(
 	logger logx.Logger,
 ) (httpapi.Server, udp.Server) {
 	udps := UDPServer(dnstype, dnsAddress, dnsPrefix, dnsProto, svc, logger)
-	apis := endpoints.WithTrace(
+	apis := endpoints.WithLogger(
 		endpoints.NewAPI(svc, udps),
 		logger,
 	)

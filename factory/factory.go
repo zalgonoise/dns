@@ -34,7 +34,7 @@ func From(conf *config.Config) httpapi.Server {
 	)
 
 	// intialize service
-	svc := service.New(dnsRepo, storeRepo, healthRepo, conf)
+	svc := service.WithTrace(service.New(dnsRepo, storeRepo, healthRepo, conf))
 
 	// initialize HTTP and DNS servers
 	https, udps := Server(

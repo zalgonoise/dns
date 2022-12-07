@@ -27,7 +27,7 @@ func writerFromPath(path string) io.Writer {
 
 func Logger(ltype, path string) logx.Logger {
 	var (
-		defaultHandler = texth.New(os.Stderr)
+		defaultHandler = jsonh.New(os.Stderr)
 		logger         = logx.New(defaultHandler)
 	)
 
