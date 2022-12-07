@@ -4,9 +4,12 @@ go_library(
     name = "service",
     srcs = [
         "dns.go",
+        "dns_with_trace.go",
         "health.go",
+        "health_with_trace.go",
         "service.go",
         "store.go",
+        "store_with_trace.go",
     ],
     importpath = "github.com/zalgonoise/dns/service",
     visibility = ["//visibility:public"],
@@ -17,7 +20,7 @@ go_library(
         "//health/simplehealth",
         "//store",
         "@com_github_miekg_dns//:dns",
-        "@com_github_zalgonoise_logx//:logx",
         "@com_github_zalgonoise_logx//attr",
+        "@com_github_zalgonoise_x_spanner//:go_default_library",
     ],
 )

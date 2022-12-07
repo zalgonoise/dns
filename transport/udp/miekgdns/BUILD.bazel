@@ -3,9 +3,9 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "miekgdns",
     srcs = [
+        "context.go",
         "dns.go",
         "handler.go",
-        "helper.go",
         "server.go",
     ],
     importpath = "github.com/zalgonoise/dns/transport/udp/miekgdns",
@@ -18,5 +18,6 @@ go_library(
         "@com_github_miekg_dns//:dns",
         "@com_github_zalgonoise_logx//:logx",
         "@com_github_zalgonoise_logx//attr",
+        "@com_github_zalgonoise_x_spanner//:go_default_library",
     ],
 )

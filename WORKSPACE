@@ -129,8 +129,8 @@ go_repository(
 go_repository(
     name = "com_github_goccy_go_json",
     importpath = "github.com/goccy/go-json",
-    sum = "h1:/pAaQDLHEoCq/5FFmSKBswWmK6H0e8g4159Kc/X/nqk=",
-    version = "v0.9.11",
+    sum = "h1:mXKd9Qw4NuzShiRlOXKews24ufknHO7gx30lsDyokKA=",
+    version = "v0.10.0",
 )
 
 go_repository(
@@ -3283,6 +3283,20 @@ go_repository(
     version = "v3.4.0",
 )
 
+go_repository(
+    name = "com_github_zalgonoise_x_ptr",
+    importpath = "github.com/zalgonoise/x/ptr",
+    sum = "h1:lRdls+xkrN0et7UKh/8vXs99GD4a2YfWC10u0meWJNs=",
+    version = "v0.0.0-20221206212221-ffe0c1d0136f",
+)
+
+go_repository(
+    name = "com_github_zalgonoise_x_spanner",
+    importpath = "github.com/zalgonoise/x/spanner",
+    sum = "h1:FTLA/2UNkhHcWuKWE8UT8pN7cLIYd1/YzPoNQshniW0=",
+    version = "v0.0.0-20221206212221-ffe0c1d0136f",
+)
+
 gazelle_dependencies()
 
 ## buildifier
@@ -3353,6 +3367,6 @@ container_pull(
 go_repository(
     name = "com_github_zalgonoise_logx",
     importpath = "github.com/zalgonoise/logx",
-    sum = "h1:e4EOAJtheSX4Os90MgjTZA8eUSH5zNsQGe3lQqLdDyU=",
-    version = "v0.0.0-20221128200033-709cc6ffd362",
+    sum = "h1:5EEb9aS41hddmsoXLXvE1dOi7wysEmZqoQTTUbuRPhg=",
+    version = "v0.0.0-20221204231347-1b448b9d61b4",
 )
