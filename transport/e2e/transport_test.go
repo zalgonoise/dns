@@ -136,7 +136,7 @@ func dnsQuestion(targetURI, rtype, domain string) *dns.Msg {
 func TestTransport(t *testing.T) {
 	dnsC, err := initService()
 	if err != nil {
-		t.Logf("unexpected error starting test container; skipping e2e tests: %v", err)
+		t.Errorf("unexpected error starting test container; skipping e2e tests: %v", err)
 		return
 	}
 	defer func() {
@@ -265,7 +265,7 @@ func TestTransport(t *testing.T) {
 			t.Run("UpdateRecord", func(t *testing.T) {
 				wants := `{"success":true,"message":"updated record successfully","data":{"type":"A","name":"really.not.a.dom.ain","address":"192.168.0.10"}}`
 
-				b, status, err := httpReq(dnsC.HTTPURI, "/records/update", []byte(`{"target":"not.a.dom.ain","data":{"name":"really.not.a.dom.ain","type":"A","address":"192.168.0.10"}}`))
+				b, status, err := httpReq(dnsC.HTTPURI, "/records/update", []byte(`{"target":"not.a.dom.ain","record":{"name":"really.not.a.dom.ain","type":"A","address":"192.168.0.10"}}`))
 				if err != nil {
 					t.Errorf("unexpected error: %v", err)
 					return
