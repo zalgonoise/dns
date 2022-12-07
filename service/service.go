@@ -95,6 +95,10 @@ type service struct {
 	conf   *config.Config
 }
 
+type withTrace struct {
+	s Service
+}
+
 // New will create a Service based on the input dns.Repository, store.Repository,
 // health.Repository and configuration. These elements are required in order to initialize
 // the Service with all elements and settings needed (such as HTTP port / UDP address)
@@ -119,5 +123,12 @@ func New(
 		store:  storeR,
 		health: healthR,
 		conf:   conf,
+	}
+}
+
+// WithTrace wraps the input Service `s` with tracing instrumentation
+func WithTrace(s Service) Service {
+	return withTrace{
+		s: s,
 	}
 }

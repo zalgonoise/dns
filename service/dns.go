@@ -23,7 +23,7 @@ func (s *service) AnswerDNS(ctx context.Context, r *store.Record, m *dnsr.Msg) {
 			s.dns.Answer(ctx, ans, m)
 		}
 	default:
-		answer, err := s.store.FilterByTypeAndDomain(ctx, r.Type, r.Name)
+		answer, err := s.store.FindByTypeAndDomain(ctx, r.Type, r.Name)
 		if err != nil || answer.Addr == "" {
 			s.dns.Fallback(ctx, r, m)
 			return
