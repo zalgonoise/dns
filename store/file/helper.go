@@ -7,8 +7,8 @@ import (
 	"os"
 
 	"github.com/zalgonoise/dns/store"
-	"github.com/zalgonoise/logx"
 	"github.com/zalgonoise/logx/attr"
+	"github.com/zalgonoise/x/spanner"
 )
 
 func toEntity(s *Store) []*store.Record {
@@ -72,24 +72,41 @@ inputLoop:
 }
 
 func (f *FileStore) sync(ctx context.Context) error {
-	logx.From(ctx).Debug("syncing records", attr.String("action", "store:sync"))
+	ctx, syncSpan := spanner.Start(ctx, "store.file.sync")
+	defer syncSpan.End()
 
-	rs, err := f.store.List(context.Background())
+	// list records
+	_, s := spanner.Start(ctx, "store.List")
+	records, err := f.store.List(ctx)
 	if err != nil {
-		logx.From(ctx).Debug("failed to list records", attr.String("error", err.Error()))
+		s.Event("failed to list store records", attr.String("error", err.Error()))
+		s.End()
 		return fmt.Errorf("%w: failed to list store records: %v", store.ErrSync, err)
+	} else {
+		s.Add(attr.Int("records_length", len(records)), attr.New("records", records))
 	}
-	b, err := f.enc.Encode(fromEntity(rs...))
+	s.End()
+
+	// encode records
+	_, s = spanner.Start(ctx, "store.file.Encode")
+	b, err := f.enc.Encode(fromEntity(records...))
 	if err != nil {
-		logx.From(ctx).Debug("failed to encode records", attr.String("error", err.Error()))
+		s.Event("failed to encode store records", attr.String("error", err.Error()))
+		s.End()
 		return fmt.Errorf("%w: failed to marshal store records to JSON: %v", store.ErrSync, err)
+	} else {
+		s.Add(attr.Int("bytes_length", len(b)))
 	}
+	s.End()
+
+	// write to file
+	_, s = spanner.Start(ctx, "store.file.Write")
 	err = os.WriteFile(f.Path, b, fs.FileMode(store.OS_ALL_RW))
 	if err != nil {
-		logx.From(ctx).Debug("failed to write records to file", attr.String("error", err.Error()))
+		s.Event("failed to write store records to file", attr.String("error", err.Error()))
+		s.End()
 		return fmt.Errorf("%w: failed to write new reference file: %v", store.ErrSync, err)
 	}
-
-	logx.From(ctx).Debug("synced records successfully")
+	s.End()
 	return nil
 }

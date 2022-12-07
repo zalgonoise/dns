@@ -37,11 +37,11 @@ func (f *FileStore) List(ctx context.Context) ([]*store.Record, error) {
 	return rs, nil
 }
 
-// FilterByTypeAndDomain implements the store.Repository interface
+// FindByTypeAndDomain implements the store.Repository interface
 //
 // It will call the in-memory store's method of the same signature
-func (f *FileStore) FilterByTypeAndDomain(ctx context.Context, rtype, domain string) (*store.Record, error) {
-	r, err := f.store.FilterByTypeAndDomain(ctx, rtype, domain)
+func (f *FileStore) FindByTypeAndDomain(ctx context.Context, rtype, domain string) (*store.Record, error) {
+	r, err := f.store.FindByTypeAndDomain(ctx, rtype, domain)
 	if err != nil {
 		return r, fmt.Errorf("failed to get record by domain: %w", err)
 	}
@@ -89,15 +89,44 @@ func (f *FileStore) Update(ctx context.Context, domain string, r *store.Record) 
 	return nil
 }
 
-// Delete implements the store.Repository interface
-//
-// It will call the in-memory store's method of the same signature, while deferring
-// a `Sync()` call to ensure the records file is up-to-date
-func (f *FileStore) Delete(ctx context.Context, r *store.Record) error {
+// DeleteByAddress removes all records with IP address `addr`
+func (f *FileStore) DeleteByAddress(ctx context.Context, addr string) error {
 	f.mtx.Lock()
 	defer f.mtx.Unlock()
 
-	err := f.store.Delete(ctx, r)
+	err := f.store.DeleteByAddress(ctx, addr)
+	if err != nil {
+		return fmt.Errorf("failed to delete record: %w", err)
+	}
+	err = f.sync(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to sync store to file: %w", err)
+	}
+	return nil
+}
+
+// DeleteByDomain removes all records with domain name `name`
+func (f *FileStore) DeleteByDomain(ctx context.Context, name string) error {
+	f.mtx.Lock()
+	defer f.mtx.Unlock()
+
+	err := f.store.DeleteByDomain(ctx, name)
+	if err != nil {
+		return fmt.Errorf("failed to delete record: %w", err)
+	}
+	err = f.sync(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to sync store to file: %w", err)
+	}
+	return nil
+}
+
+// DeleteByTypeAndDomain removes all records with record type `rtype` and domain name `name`
+func (f *FileStore) DeleteByTypeAndDomain(ctx context.Context, rtype, name string) error {
+	f.mtx.Lock()
+	defer f.mtx.Unlock()
+
+	err := f.store.DeleteByTypeAndDomain(ctx, rtype, name)
 	if err != nil {
 		return fmt.Errorf("failed to delete record: %w", err)
 	}
