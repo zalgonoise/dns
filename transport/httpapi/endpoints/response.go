@@ -97,7 +97,7 @@ func (r HttpResponse[T]) WriteHTTP(ctx context.Context, w http.ResponseWriter) {
 	enc := enc(ctx)
 
 	w.WriteHeader(r.Status)
-	response, err := enc.Encode(r.Data)
+	response, err := enc.Encode(r)
 	if err != nil {
 		s.Event("failed to encode response", attr.String("error", err.Error()))
 	}
