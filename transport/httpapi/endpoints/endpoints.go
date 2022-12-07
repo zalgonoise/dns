@@ -23,7 +23,7 @@ func NewAPI(s service.Service, udps udp.Server) httpapi.HTTPAPI {
 	}
 }
 
-func WithTrace(api httpapi.HTTPAPI, logger logx.Logger) httpapi.HTTPAPI {
+func WithLogger(api httpapi.HTTPAPI, logger logx.Logger) httpapi.HTTPAPI {
 	if _, ok := api.(*endpoints); !ok {
 		return api
 	}

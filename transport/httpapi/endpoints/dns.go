@@ -3,91 +3,55 @@ package endpoints
 import (
 	"net/http"
 
-	"github.com/zalgonoise/dns/transport/httpapi"
-	"github.com/zalgonoise/logx"
-	"github.com/zalgonoise/logx/attr"
+	"github.com/zalgonoise/x/ptr"
 )
 
 func (e *endpoints) StartDNS(w http.ResponseWriter, r *http.Request) {
-	var (
-		err error
-		ctx = e.newCtx("http:dns:start",
-			attr.String("remote_addr", r.RemoteAddr),
-			attr.String("user_agent", r.UserAgent()),
-		)
-	)
-	logx.From(ctx).Debug("/dns/start request")
+	ctx, _, done := e.newCtxAndSpan(r, "http.StartDNS")
+	defer done()
 
+	var err error
 	go func() {
 		err = e.UDP.Start(ctx)
 	}()
 
 	if err != nil {
-		w.WriteHeader(500)
-		response, _ := e.enc.Encode(httpapi.DNSResponse{
-			Success: false,
-			Message: "failed to start DNS server",
-			Error:   err.Error(),
-		})
-		_, _ = w.Write(response)
-		logx.From(ctx).Error("failed to start DNS server", attr.String("error", err.Error()))
+		res := NewResponse[string](500, "failed to start UDP server", err, nil)
+		res.WriteHTTP(ctx, w)
 		return
 	}
-	w.WriteHeader(200)
-	response, _ := e.enc.Encode(httpapi.DNSResponse{
-		Success: true,
-		Message: "started DNS server",
-	})
-	_, _ = w.Write(response)
-	logx.From(ctx).Debug("started DNS server")
+
+	res := NewResponse(200, "started UDP server successfully", nil, ptr.To("ok"))
+	res.WriteHTTP(ctx, w)
 }
 
 func (e *endpoints) StopDNS(w http.ResponseWriter, r *http.Request) {
-	var ctx = e.newCtx("http:dns:stop",
-		attr.String("remote_addr", r.RemoteAddr),
-		attr.String("user_agent", r.UserAgent()),
-	)
-	logx.From(ctx).Debug("/dns/stop request")
+	ctx, _, done := e.newCtxAndSpan(r, "http.StopDNS")
+	defer done()
 
 	err := e.UDP.Stop(ctx)
 	if err != nil {
-		w.WriteHeader(500)
-		response, _ := e.enc.Encode(httpapi.DNSResponse{
-			Success: false,
-			Message: "failed to stop DNS server",
-			Error:   err.Error(),
-		})
-		_, _ = w.Write(response)
-		logx.From(ctx).Error("failed to stop DNS server", attr.String("error", err.Error()))
+		res := NewResponse[string](500, "failed to stop UDP server", err, nil)
+		res.WriteHTTP(ctx, w)
 		return
 	}
-	w.WriteHeader(200)
-	response, _ := e.enc.Encode(httpapi.DNSResponse{
-		Success: true,
-		Message: "stopped DNS server",
-	})
-	_, _ = w.Write(response)
-	logx.From(ctx).Debug("stopped DNS server")
+
+	res := NewResponse(200, "stopped UDP server successfully", nil, ptr.To("ok"))
+	res.WriteHTTP(ctx, w)
 }
 
 func (e *endpoints) ReloadDNS(w http.ResponseWriter, r *http.Request) {
-	var ctx = e.newCtx("http:dns:reload",
-		attr.String("remote_addr", r.RemoteAddr),
-		attr.String("user_agent", r.UserAgent()),
-	)
-	logx.From(ctx).Debug("/dns/reload request")
+	ctx, _, done := e.newCtxAndSpan(r, "http.ReloadDNS")
+	defer done()
 
-	err := e.UDP.Stop(ctx)
-	if err != nil {
-		w.WriteHeader(500)
-		response, _ := e.enc.Encode(httpapi.DNSResponse{
-			Success: false,
-			Message: "failed to stop DNS server",
-			Error:   err.Error(),
-		})
-		_, _ = w.Write(response)
-		logx.From(ctx).Error("failed to stop DNS server", attr.String("error", err.Error()))
-		return
+	var err error
+	if e.UDP.Running(ctx) {
+		err = e.UDP.Stop(ctx)
+		if err != nil {
+			res := NewResponse[string](500, "failed to stop UDP server", err, nil)
+			res.WriteHTTP(ctx, w)
+			return
+		}
 	}
 
 	go func() {
@@ -95,21 +59,11 @@ func (e *endpoints) ReloadDNS(w http.ResponseWriter, r *http.Request) {
 	}()
 
 	if err != nil {
-		w.WriteHeader(500)
-		response, _ := e.enc.Encode(httpapi.DNSResponse{
-			Success: false,
-			Message: "failed to start DNS server",
-			Error:   err.Error(),
-		})
-		_, _ = w.Write(response)
-		logx.From(ctx).Error("failed to start DNS server", attr.String("error", err.Error()))
+		res := NewResponse[string](500, "failed to start UDP server", err, nil)
+		res.WriteHTTP(ctx, w)
 		return
 	}
-	w.WriteHeader(200)
-	response, _ := e.enc.Encode(httpapi.DNSResponse{
-		Success: true,
-		Message: "reloaded DNS server",
-	})
-	_, _ = w.Write(response)
-	logx.From(ctx).Debug("started DNS server")
+
+	res := NewResponse(200, "reloaded UDP server successfully", nil, ptr.To("ok"))
+	res.WriteHTTP(ctx, w)
 }

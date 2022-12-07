@@ -5,8 +5,6 @@ import (
 
 	"github.com/miekg/dns"
 	"github.com/zalgonoise/dns/transport/udp"
-	"github.com/zalgonoise/logx"
-	"github.com/zalgonoise/logx/attr"
 )
 
 // Start launches the DNS server, returning an error
@@ -21,12 +19,6 @@ func (u *udps) Start(ctx context.Context) error {
 	}
 	u.on = true
 
-	logx.From(ctx).Debug("starting UDP server", attr.New("config", []attr.Attr{
-		attr.String("action", "dns:start"),
-		attr.String("address", u.conf.Addr),
-		attr.String("protocol", u.conf.Proto),
-	}))
-
 	return u.srv.ListenAndServe()
 }
 
@@ -35,12 +27,6 @@ func (u *udps) Stop(ctx context.Context) error {
 	if !u.on {
 		return udp.ErrNotRunning
 	}
-
-	logx.From(ctx).Debug("stopping UDP server", attr.New("config", []attr.Attr{
-		attr.String("action", "dns:stop"),
-		attr.String("address", u.conf.Addr),
-		attr.String("protocol", u.conf.Proto),
-	}))
 
 	u.on = false
 	return u.srv.Shutdown()

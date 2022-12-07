@@ -1,6 +1,8 @@
 package httpapi
 
-import "net/http"
+import (
+	"net/http"
+)
 
 type HTTPAPI interface {
 	StartDNS(w http.ResponseWriter, r *http.Request)

@@ -25,7 +25,7 @@ import (
 	// testcontainers "github.com/testcontainers/testcontainers-go"
 	"github.com/zalgonoise/dns/health"
 	"github.com/zalgonoise/dns/store"
-	"github.com/zalgonoise/dns/transport/httpapi"
+	"github.com/zalgonoise/dns/transport/httpapi/endpoints"
 )
 
 type dnsContainer struct {
@@ -349,11 +349,11 @@ func TestTransport(t *testing.T) {
 			return
 		}
 
-		res := &httpapi.HealthResponse{}
+		res := new(endpoints.HttpResponse[health.Report])
 		_ = json.Unmarshal(b, res)
 
-		if res.Report.Status != health.Healthy {
-			t.Errorf("service status is not as expected: wanted %v ; got %v", health.Healthy, res.Report.Status)
+		if res.Data.Status != health.Healthy {
+			t.Errorf("service status is not as expected: wanted %v ; got %v", health.Healthy, res.Data.Status)
 			return
 		}
 
