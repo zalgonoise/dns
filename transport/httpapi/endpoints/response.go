@@ -87,11 +87,27 @@ func NewResponse[T any](status int, message string, err error, data *T) HttpResp
 
 // WriteHTTP writes the contents of the object to the http.ResponseWriter `w`
 func (r HttpResponse[T]) WriteHTTP(ctx context.Context, w http.ResponseWriter) {
+	ctx, s := spanner.Start(ctx, "http.HttpResponse.WriteHTTP",
+		attr.Int("http_status", r.Status),
+		attr.String("for_type", fmt.Sprintf("%T", *new(T))),
+		attr.New("response", r),
+	)
+	defer s.End()
+
 	enc := enc(ctx)
 
 	w.WriteHeader(r.Status)
-	response, _ := enc.Encode(r.Data)
-	_, _ = w.Write(response)
+	response, err := enc.Encode(r.Data)
+	if err != nil {
+		s.Event("failed to encode response", attr.String("error", err.Error()))
+	}
+
+	n, err := w.Write(response)
+	if err != nil {
+		s.Event("failed to write response", attr.String("error", err.Error()))
+	}
+
+	s.Event("response written successfully", attr.String("raw", string(response)), attr.Int("bytes_written", n))
 }
 
 // readBody reads the data in the Body of *http.Request `r` as a bytes buffer,
