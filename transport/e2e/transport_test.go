@@ -22,7 +22,6 @@ import (
 	"github.com/miekg/dns"
 	testcontainers "github.com/testcontainers/testcontainers-go"
 
-	// testcontainers "github.com/testcontainers/testcontainers-go"
 	"github.com/zalgonoise/dns/health"
 	"github.com/zalgonoise/dns/store"
 	"github.com/zalgonoise/dns/transport/httpapi/endpoints"
@@ -201,7 +200,7 @@ func TestTransport(t *testing.T) {
 				t.Log("[ok] /records/add")
 			})
 			t.Run("ListRecords", func(t *testing.T) {
-				wants := `{"success":true,"message":"listing all records","data":[{"type":"A","name":"not.a.dom.ain","address":"192.168.0.10"}]}`
+				wants := `{"success":true,"message":"listed records successfully","data":[{"type":"A","name":"not.a.dom.ain","address":"192.168.0.10"}]}`
 
 				b, status, err := httpReq(dnsC.HTTPURI, "/records", nil)
 				if err != nil {
@@ -222,7 +221,7 @@ func TestTransport(t *testing.T) {
 				t.Log("[ok] /records")
 			})
 			t.Run("GetRecordByDomainAndType", func(t *testing.T) {
-				wants := `{"success":true,"message":"fetched record for domain not.a.dom.ain","data":{"type":"A","name":"not.a.dom.ain","address":"192.168.0.10"}}`
+				wants := `{"success":true,"message":"fetched record successfully","data":{"type":"A","name":"not.a.dom.ain","address":"192.168.0.10"}}`
 
 				b, status, err := httpReq(dnsC.HTTPURI, "/records/getAddress", []byte(`{"name":"not.a.dom.ain","type":"A"}`))
 				if err != nil {
@@ -243,7 +242,7 @@ func TestTransport(t *testing.T) {
 				t.Log("[ok] /records/getAddress")
 			})
 			t.Run("GetRecordByAddress", func(t *testing.T) {
-				wants := `{"success":true,"message":"listing all records for IP address 192.168.0.10","data":[{"type":"A","name":"not.a.dom.ain","address":"192.168.0.10"}]}`
+				wants := `{"success":true,"message":"fetched record successfully","data":[{"type":"A","name":"not.a.dom.ain","address":"192.168.0.10"}]}`
 
 				b, status, err := httpReq(dnsC.HTTPURI, "/records/getDomains", []byte(`{"address":"192.168.0.10"}`))
 				if err != nil {
@@ -362,7 +361,7 @@ func TestTransport(t *testing.T) {
 	t.Run("Shutdown", func(t *testing.T) {
 		t.Run("Store", func(t *testing.T) {
 			t.Run("DeleteRecord", func(t *testing.T) {
-				wants := `{"success":true,"message":"record deleted successfully","data":{"type":"A","name":"really.not.a.dom.ain"}}`
+				wants := `{"success":true,"message":"deleted record successfully","data":{"type":"A","name":"really.not.a.dom.ain"}}`
 
 				b, status, err := httpReq(dnsC.HTTPURI, "/records/delete", []byte(`{"name":"really.not.a.dom.ain","type":"A"}`))
 				if err != nil {
