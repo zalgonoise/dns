@@ -57,7 +57,7 @@ func Logger(ltype, path string) logx.Logger {
 	default:
 		return logx.New(
 			handlers.Multi(
-				texth.New(fileWriter),
+				jsonh.New(fileWriter),
 				defaultHandler,
 			),
 		)

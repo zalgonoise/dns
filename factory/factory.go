@@ -53,7 +53,7 @@ func From(conf *config.Config) httpapi.Server {
 			ctx := logx.InContext(context.Background(), logger)
 			err := udps.Start(ctx)
 			if err != nil {
-				logx.Fatal("error starting DNS server",
+				logger.Fatal("error starting DNS server",
 					attr.String("error", err.Error()),
 				)
 				os.Exit(1)
