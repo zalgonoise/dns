@@ -14,7 +14,7 @@ go_library(
         "//store/encoder",
         "//store/memmap",
         "@com_github_zalgonoise_logx//attr",
-        "@com_github_zalgonoise_x_spanner//:go_default_library",
+        "@com_github_zalgonoise_x_spanner//:spanner",
     ],
 )
 
