@@ -17,10 +17,10 @@ type Repository interface {
 	// List will fetch all records in the key-value store
 	List(context.Context) ([]*Record, error)
 
-	// FilterByTypeAndDomain will fetch an address based on its address and type strings
+	// FindByTypeAndDomain will fetch an address based on its address and type strings
 	//
-	// FilterByTypeAndDomain(ctx, "A", "service.mydomain") -> { "127.0.0.1", nil }
-	FilterByTypeAndDomain(context.Context, string, string) (*Record, error)
+	// FindByTypeAndDomain(ctx, "A", "service.mydomain") -> { "127.0.0.1", nil }
+	FindByTypeAndDomain(context.Context, string, string) (*Record, error)
 
 	// FilterByDomain will fetch an address based on its address for all types
 	//
@@ -36,6 +36,12 @@ type Repository interface {
 	// and by supplying a new version of the Record to update. Returns an error
 	Update(context.Context, string, *Record) error
 
-	// Delete will remove a DNS Record, filtering as per the provided data in the Record
-	Delete(context.Context, *Record) error
+	// DeleteByAddress removes all records with IP address `addr`
+	DeleteByAddress(ctx context.Context, addr string) error
+
+	// DeleteByDomain removes all records with domain name `name`
+	DeleteByDomain(ctx context.Context, name string) error
+
+	// DeleteByTypeAndDomain removes all records with record type `rtype` and domain name `name`
+	DeleteByTypeAndDomain(ctx context.Context, rtype, name string) error
 }

@@ -48,13 +48,13 @@ func (m *MemoryStore) List(ctx context.Context) ([]*store.Record, error) {
 	return output, nil
 }
 
-// FilterByTypeAndDomain implements the store.Repository interface
+// FindByTypeAndDomain implements the store.Repository interface
 //
 // It will return a pointer to a store.Record if there is an IP address
 // registered to the input store.Record's domain name and record type.
 //
 // It also returns an error in case the record does not exist
-func (m *MemoryStore) FilterByTypeAndDomain(ctx context.Context, rtype, domain string) (*store.Record, error) {
+func (m *MemoryStore) FindByTypeAndDomain(ctx context.Context, rtype, domain string) (*store.Record, error) {
 	m.mtx.Lock()
 	defer m.mtx.Unlock()
 
@@ -91,10 +91,6 @@ func (m *MemoryStore) FilterByDomain(ctx context.Context, domain string) ([]*sto
 		}
 	}
 
-	if len(out) == 0 {
-		return out, store.ErrDoesNotExist
-	}
-
 	return out, nil
 }
 
@@ -128,6 +124,7 @@ func (m *MemoryStore) FilterByDest(ctx context.Context, addr string) ([]*store.R
 			}
 		}
 	}
+
 	return output, nil
 }
 
@@ -143,7 +140,6 @@ func (m *MemoryStore) FilterByDest(ctx context.Context, addr string) ([]*store.R
 func (m *MemoryStore) Update(ctx context.Context, domain string, r *store.Record) error {
 	m.mtx.Lock()
 	defer m.mtx.Unlock()
-	isSameDomain := domain == r.Name
 
 	if _, ok := m.Records[r.Type]; !ok {
 		return store.ErrDoesNotExist
@@ -151,35 +147,48 @@ func (m *MemoryStore) Update(ctx context.Context, domain string, r *store.Record
 	if _, ok := m.Records[r.Type][domain]; !ok {
 		return store.ErrDoesNotExist
 	}
-	if !isSameDomain {
+	if domain != r.Name {
 		delete(m.Records[r.Type], domain)
 	}
 	m.Records[r.Type][r.Name] = r.Addr
+
 	return nil
 }
 
-// Delete implements the store.Repository interface
-//
-// It will leverage the input store.Record to commit to a record deletion.
-//
-// If:
-//   - a domain name is provided: its target IP address and record types are removed
-//   - a domain name and record type are provided: remove the target IP address associated
-//   - IP address is populated: delete all records associated with that address
-//
-// It returns an error if the operation is unsuccessful (which is not a scenario as of now)
-func (m *MemoryStore) Delete(ctx context.Context, r *store.Record) error {
-	m.mtx.Lock()
-	defer m.mtx.Unlock()
+// DeleteByAddress removes all records with IP address `addr`
+func (m *MemoryStore) DeleteByAddress(ctx context.Context, addr string) error {
+	for rtype, rmap := range m.Records {
+		for domain, address := range rmap {
+			if address == addr {
+				delete(m.Records[rtype], domain)
+			}
+		}
+	}
+	return nil
+}
 
-	if r.Name != "" && r.Type == "" && r.Addr == "" {
-		deleteDomain(m, r.Name)
+// DeleteByDomain removes all records with domain name `name`
+func (m *MemoryStore) DeleteByDomain(ctx context.Context, name string) error {
+	for rtype, domains := range m.Records {
+		for domain := range domains {
+			if domain == name {
+				delete(m.Records[rtype], domain)
+			}
+		}
 	}
-	if r.Name != "" && r.Type != "" && r.Addr == "" {
-		deleteDomainByType(m, r.Name, r.Type)
-	}
-	if r.Addr != "" {
-		deleteAddress(m, r.Addr)
+	return nil
+}
+
+// DeleteByTypeAndDomain removes all records with record type `rtype` and domain name `name`
+func (m *MemoryStore) DeleteByTypeAndDomain(ctx context.Context, rtype, name string) error {
+	for recordtype, domains := range m.Records {
+		if recordtype == rtype {
+			for domain := range domains {
+				if domain == name {
+					delete(m.Records[recordtype], domain)
+				}
+			}
+		}
 	}
 	return nil
 }

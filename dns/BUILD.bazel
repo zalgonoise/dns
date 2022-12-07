@@ -3,6 +3,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "dns",
     srcs = [
+        "dns_with_trace.go",
         "repository.go",
         "unimplemented.go",
     ],
@@ -11,5 +12,7 @@ go_library(
     deps = [
         "//store",
         "@com_github_miekg_dns//:dns",
+        "@com_github_zalgonoise_logx//attr",
+        "@com_github_zalgonoise_x_spanner//:spanner",
     ],
 )

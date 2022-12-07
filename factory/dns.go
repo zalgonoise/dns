@@ -15,5 +15,5 @@ func DNSRepository(rtype string, fallbackDNS ...string) dns.Repository {
 		dnsRepo = core.New(fallbackDNS...)
 	}
 
-	return dnsRepo
+	return dns.WithTrace(dnsRepo)
 }

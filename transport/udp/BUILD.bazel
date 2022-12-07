@@ -5,7 +5,12 @@ go_library(
     srcs = [
         "dns.go",
         "server.go",
+        "udp_with_trace.go",
     ],
     importpath = "github.com/zalgonoise/dns/transport/udp",
     visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_zalgonoise_logx//attr",
+        "@com_github_zalgonoise_x_spanner//:spanner",
+    ],
 )

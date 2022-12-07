@@ -4,10 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-
-	json "github.com/goccy/go-json"
-
-	"github.com/zalgonoise/dns/transport/udp"
 )
 
 type Server interface {
@@ -51,27 +47,7 @@ func (s *server) Start() error {
 }
 
 func (s *server) Stop() error {
-	var (
-		rw  = &responseWriter{}
-		err error
-	)
-	s.ep.StopDNS(rw, &http.Request{})
-	res := &DNSResponse{}
+	s.ep.StopDNS(&responseWriter{}, &http.Request{})
+	return s.srv.Shutdown(context.Background())
 
-	_ = json.Unmarshal([]byte(rw.response), res)
-
-	if rw.header != 200 && res.Error != udp.ErrNotRunning.Error() {
-		err = fmt.Errorf("%s", rw.response)
-	}
-
-	httpErr := s.srv.Shutdown(context.Background())
-	if err == nil && httpErr != nil {
-		err = httpErr
-		httpErr = nil
-	}
-	if httpErr != nil && err != nil {
-		err = fmt.Errorf("http: %v ; udp: %w", httpErr, err)
-	}
-
-	return err
 }

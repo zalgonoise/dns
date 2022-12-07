@@ -1,6 +1,7 @@
 package core
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -10,7 +11,7 @@ import (
 
 // Answer will take the IP address populated in the store.Response `r`, and
 // append it as a DNS response to the dns.Msg `m`'s Answer slice
-func (d *DNSCore) Answer(r *store.Record, m *dns.Msg) {
+func (d *DNSCore) Answer(ctx context.Context, r *store.Record, m *dns.Msg) {
 	response, err := dns.NewRR(
 		fmt.Sprintf("%s %s %s", r.Name, r.Type, r.Addr),
 	)
@@ -25,7 +26,7 @@ func (d *DNSCore) Answer(r *store.Record, m *dns.Msg) {
 //
 // If there is an answer, it is written to the dns.Msg `r`'s Answer slice; otherwise
 // the request is discarted until it times out
-func (d *DNSCore) Fallback(r *store.Record, m *dns.Msg) {
+func (d *DNSCore) Fallback(ctx context.Context, r *store.Record, m *dns.Msg) {
 	message := new(dns.Msg)
 	message.SetQuestion(dns.Fqdn(r.Name), store.RecordTypeInts[r.Type])
 	client := &dns.Client{

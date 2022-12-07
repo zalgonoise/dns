@@ -48,10 +48,10 @@ func TestJSON(t *testing.T) {
 			t.Errorf("output mismatch error: wanted %s ; got %s", test1, rs[0])
 		}
 	})
-	t.Run("FilterByTypeAndDomain", func(t *testing.T) {
+	t.Run("FindByTypeAndDomain", func(t *testing.T) {
 		ctx := context.Background()
 
-		r, err := s.FilterByTypeAndDomain(ctx, test1.Type, test1.Name)
+		r, err := s.FindByTypeAndDomain(ctx, test1.Type, test1.Name)
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
@@ -81,7 +81,7 @@ func TestJSON(t *testing.T) {
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
-		r, err := s.FilterByTypeAndDomain(ctx, test2.Type, test2.Name)
+		r, err := s.FindByTypeAndDomain(ctx, test2.Type, test2.Name)
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
@@ -101,7 +101,7 @@ func TestJSON(t *testing.T) {
 		ctx := context.Background()
 		wants := `{}`
 
-		err := s.Delete(ctx, test2)
+		err := s.DeleteByTypeAndDomain(ctx, test2.Type, test2.Name)
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
@@ -161,10 +161,10 @@ func TestYAML(t *testing.T) {
 			t.Errorf("output mismatch error: wanted %s ; got %s", test1, rs[0])
 		}
 	})
-	t.Run("FilterByTypeAndDomain", func(t *testing.T) {
+	t.Run("FindByTypeAndDomain", func(t *testing.T) {
 		ctx := context.Background()
 
-		r, err := s.FilterByTypeAndDomain(ctx, test1.Type, test1.Name)
+		r, err := s.FindByTypeAndDomain(ctx, test1.Type, test1.Name)
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
@@ -199,7 +199,7 @@ func TestYAML(t *testing.T) {
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
-		r, err := s.FilterByTypeAndDomain(ctx, test2.Type, test2.Name)
+		r, err := s.FindByTypeAndDomain(ctx, test2.Type, test2.Name)
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
@@ -220,7 +220,7 @@ func TestYAML(t *testing.T) {
 		wants := `{}
 `
 
-		err := s.Delete(ctx, test2)
+		err := s.DeleteByTypeAndDomain(ctx, test2.Type, test2.Name)
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}

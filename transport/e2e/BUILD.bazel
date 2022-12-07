@@ -6,7 +6,7 @@ go_test(
     deps = [
         "//health",
         "//store",
-        "//transport/httpapi",
+        "//transport/httpapi/endpoints",
         "@com_github_miekg_dns//:dns",
         "@com_github_testcontainers_testcontainers_go//:testcontainers-go",
     ],

@@ -139,7 +139,7 @@ It exposes basic create, read, update, delete (CRUD) operations, as well as spec
 type Repository interface {
 	Create(context.Context, ...*Record) error
 	List(context.Context) ([]*Record, error)
-	FilterByTypeAndDomain(context.Context, string, string) (*Record, error)
+	FindByTypeAndDomain(context.Context, string, string) (*Record, error)
 	FilterByDomain(context.Context, string) ([]*Record, error)
 	FilterByDest(context.Context, string) ([]*Record, error)
 	Update(context.Context, string, *Record) error

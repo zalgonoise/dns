@@ -1,6 +1,7 @@
 package simplehealth
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"time"
@@ -24,7 +25,7 @@ func New() health.Repository {
 
 // Store will take in the number of records in the store and the time.Duration for a
 // store.List operation, and return a StoreReport based off of this information
-func (h *shealth) Store(length int, t time.Duration) *health.StoreReport {
+func (h *shealth) Store(ctx context.Context, length int, t time.Duration) *health.StoreReport {
 	var out = &health.StoreReport{}
 
 	switch length {
@@ -47,7 +48,7 @@ func (h *shealth) Store(length int, t time.Duration) *health.StoreReport {
 // DNS will take in the address of the UDP server, the fallback DNS address (if set),
 // and a store.Record, which are used to answer internal and external DNS queries as part
 // of a health check; returning a DNSReport based off of this information
-func (h *shealth) DNS(address string, fallback string, record *store.Record) *health.DNSReport {
+func (h *shealth) DNS(ctx context.Context, address string, fallback string, record *store.Record) *health.DNSReport {
 	var (
 		isFailing bool
 		out       = &health.DNSReport{}
@@ -106,7 +107,7 @@ func (h *shealth) DNS(address string, fallback string, record *store.Record) *he
 
 // HTTP will take the HTTP server's port so it can perform a HTTP request against one
 // of its endpoints, and returning a HTTPReport based off of this information
-func (h *shealth) HTTP(port int) *health.HTTPReport {
+func (h *shealth) HTTP(ctx context.Context, port int) *health.HTTPReport {
 	var out = &health.HTTPReport{}
 
 	address := fmt.Sprintf("http://localhost:%v/records", port)
@@ -128,6 +129,7 @@ func (h *shealth) HTTP(port int) *health.HTTPReport {
 // Merge will unite a StoreReport, DNSReport and HTTPReport, returning a Report which
 // encapsulates these as well as an overall status for the service
 func (h *shealth) Merge(
+	ctx context.Context,
 	storeH *health.StoreReport,
 	dnsH *health.DNSReport,
 	httpH *health.HTTPReport,

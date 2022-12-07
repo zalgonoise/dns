@@ -7,8 +7,13 @@ go_library(
         "filemode.go",
         "record.go",
         "repository.go",
+        "store_with_trace.go",
         "unimplemented.go",
     ],
     importpath = "github.com/zalgonoise/dns/store",
     visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_zalgonoise_logx//attr",
+        "@com_github_zalgonoise_x_spanner//:spanner",
+    ],
 )

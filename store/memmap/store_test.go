@@ -119,7 +119,7 @@ func TestFilterByDomain(t *testing.T) {
 			t.Errorf("unexpected error: %v", err)
 		}
 
-		r, err := s.FilterByTypeAndDomain(ctx, test2.Type, test2.Name)
+		r, err := s.FindByTypeAndDomain(ctx, test2.Type, test2.Name)
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
@@ -142,7 +142,7 @@ func TestFilterByDomain(t *testing.T) {
 			t.Errorf("unexpected error: %v", err)
 		}
 
-		_, err = s.FilterByTypeAndDomain(ctx, test2.Type, test2.Name)
+		_, err = s.FindByTypeAndDomain(ctx, test2.Type, test2.Name)
 		if !errors.Is(store.ErrDoesNotExist, err) {
 			t.Errorf("unexpected error: %v", err)
 		}
@@ -156,7 +156,7 @@ func TestFilterByDomain(t *testing.T) {
 			t.Errorf("unexpected error: %v", err)
 		}
 
-		_, err = s.FilterByTypeAndDomain(ctx, test2.Type, test2.Name)
+		_, err = s.FindByTypeAndDomain(ctx, test2.Type, test2.Name)
 		if !errors.Is(store.ErrDoesNotExist, err) {
 			t.Errorf("unexpected error: %v", err)
 		}
@@ -272,9 +272,7 @@ func TestDelete(t *testing.T) {
 			t.Errorf("unexpected error: %v", err)
 		}
 
-		query := store.New().Name(test2.Name).Build()
-
-		err = s.Delete(ctx, query)
+		err = s.DeleteByDomain(ctx, test2.Name)
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
@@ -297,9 +295,7 @@ func TestDelete(t *testing.T) {
 			t.Errorf("unexpected error: %v", err)
 		}
 
-		query := store.New().Name(test2.Name).Type(test2.Type).Build()
-
-		err = s.Delete(ctx, query)
+		err = s.DeleteByTypeAndDomain(ctx, test2.Type, test2.Name)
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
@@ -322,9 +318,7 @@ func TestDelete(t *testing.T) {
 			t.Errorf("unexpected error: %v", err)
 		}
 
-		query := store.New().Addr(test2.Addr).Build()
-
-		err = s.Delete(ctx, query)
+		err = s.DeleteByAddress(ctx, test2.Addr)
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}

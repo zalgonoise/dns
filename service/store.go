@@ -15,6 +15,7 @@ func (s *service) AddRecord(ctx context.Context, r *store.Record) error {
 	if err != nil {
 		return fmt.Errorf("couldn't add target record: %w", err)
 	}
+
 	return nil
 }
 
@@ -24,6 +25,7 @@ func (s *service) AddRecords(ctx context.Context, rs ...*store.Record) error {
 	if err != nil {
 		return fmt.Errorf("couldn't add target records: %w", err)
 	}
+
 	return nil
 }
 
@@ -33,9 +35,7 @@ func (s *service) ListRecords(ctx context.Context) ([]*store.Record, error) {
 	if err != nil {
 		return nil, fmt.Errorf("couldn't list any records: %w", err)
 	}
-	if len(rs) == 0 {
-		return rs, fmt.Errorf("no records in the store: %w", store.ErrZeroRecords)
-	}
+
 	return rs, nil
 }
 
@@ -52,10 +52,11 @@ func (s *service) GetRecordByTypeAndDomain(ctx context.Context, rtype, domain st
 		return nil, ErrNoType
 	}
 
-	r, err := s.store.FilterByTypeAndDomain(ctx, rtype, domain)
+	r, err := s.store.FindByTypeAndDomain(ctx, rtype, domain)
 	if err != nil {
 		return nil, fmt.Errorf("couldn't fetch target record: %w", err)
 	}
+
 	return r, nil
 }
 
@@ -75,6 +76,7 @@ func (s *service) GetRecordByAddress(ctx context.Context, ip string) ([]*store.R
 	if len(rs) == 0 {
 		return rs, fmt.Errorf("no records in the store: %w", store.ErrZeroRecords)
 	}
+
 	return rs, nil
 }
 
@@ -91,9 +93,10 @@ func (s *service) UpdateRecord(ctx context.Context, domain string, r *store.Reco
 	}
 	// if record is nil or empty, request is parsed as a delete operation
 	if r == nil || reflect.DeepEqual(r, &store.Record{}) {
-		return s.store.Delete(ctx, &store.Record{Name: domain})
+		return s.store.DeleteByDomain(ctx, domain)
 	}
-	_, err := s.store.FilterByTypeAndDomain(ctx, r.Type, domain)
+
+	_, err := s.store.FindByTypeAndDomain(ctx, r.Type, domain)
 	if err != nil && errors.Is(err, store.ErrDoesNotExist) {
 		return fmt.Errorf("couldn't find target record: %w", err)
 	}
@@ -102,12 +105,28 @@ func (s *service) UpdateRecord(ctx context.Context, domain string, r *store.Reco
 	if err != nil {
 		return fmt.Errorf("couldn't update target record: %w", err)
 	}
+
 	return nil
 }
 
 // DeleteRecord uses the store.Repository to remove the store.Record based on input `r`
 func (s *service) DeleteRecord(ctx context.Context, r *store.Record) error {
-	err := s.store.Delete(ctx, r)
+	if r == nil {
+		return ErrEmtpyRecord
+	}
+	var delFn func() error = func() error { return nil }
+
+	if r.Name != "" && r.Type == "" && r.Addr == "" {
+		delFn = func() error { return s.store.DeleteByDomain(ctx, r.Name) }
+	}
+	if r.Name != "" && r.Type != "" && r.Addr == "" {
+		delFn = func() error { return s.store.DeleteByTypeAndDomain(ctx, r.Type, r.Name) }
+	}
+	if r.Addr != "" {
+		delFn = func() error { return s.store.DeleteByAddress(ctx, r.Addr) }
+	}
+
+	err := delFn()
 	if err != nil {
 		return fmt.Errorf("couldn't delete target record: %w", err)
 	}

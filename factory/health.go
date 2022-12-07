@@ -6,10 +6,14 @@ import (
 )
 
 func HealthRepository(rtype string) health.Repository {
+	var healthRepo health.Repository
+
 	switch rtype {
 	case "simple", "simplehealth":
-		return simplehealth.New()
+		healthRepo = simplehealth.New()
 	default:
-		return simplehealth.New()
+		healthRepo = simplehealth.New()
 	}
+
+	return health.WithTrace(healthRepo)
 }

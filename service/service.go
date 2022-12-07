@@ -56,19 +56,19 @@ type StoreService interface {
 type DNSService interface {
 	// AnswerDNS uses the dns.Repository to reply to the dns.Msg `m` with the answer
 	// in store.Record `r`
-	AnswerDNS(r *store.Record, m *dnsr.Msg)
+	AnswerDNS(ctx context.Context, r *store.Record, m *dnsr.Msg)
 }
 
 // HealthService interface joins the set of methods leveraging the health.Repository
 type HealthService interface {
 	// StoreHealth uses the health.Repository to generate a health.StoreReport
-	StoreHealth() *health.StoreReport
+	StoreHealth(ctx context.Context) *health.StoreReport
 	// DNSHealth uses the health.Repository to generate a health.DNSReport
-	DNSHealth() *health.DNSReport
+	DNSHealth(ctx context.Context) *health.DNSReport
 	// HTTPHealth uses the health.Repository to generate a health.HTTPReport
-	HTTPHealth() *health.HTTPReport
+	HTTPHealth(ctx context.Context) *health.HTTPReport
 	// Health uses the health.Repository to generate a health.Report
-	Health() *health.Report
+	Health(ctx context.Context) *health.Report
 }
 
 // StoreService interface joins the store.Repository-derived methods
@@ -85,7 +85,7 @@ type StoreWithHealth interface {
 //	granular scope of which operations can a certain module access
 type Answering interface {
 	GetRecordByTypeAndDomain(context.Context, string, string) (*store.Record, error)
-	AnswerDNS(*store.Record, *dnsr.Msg)
+	AnswerDNS(context.Context, *store.Record, *dnsr.Msg)
 }
 
 type service struct {
@@ -93,6 +93,10 @@ type service struct {
 	store  store.Repository
 	health health.Repository
 	conf   *config.Config
+}
+
+type withTrace struct {
+	s Service
 }
 
 // New will create a Service based on the input dns.Repository, store.Repository,
@@ -119,5 +123,12 @@ func New(
 		store:  storeR,
 		health: healthR,
 		conf:   conf,
+	}
+}
+
+// WithTrace wraps the input Service `s` with tracing instrumentation
+func WithTrace(s Service) Service {
+	return withTrace{
+		s: s,
 	}
 }
