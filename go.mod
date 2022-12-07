@@ -3,10 +3,10 @@ module github.com/zalgonoise/dns
 go 1.19
 
 require (
-	github.com/goccy/go-json v0.9.11
+	github.com/goccy/go-json v0.10.0
 	github.com/miekg/dns v1.1.50
 	github.com/testcontainers/testcontainers-go v0.15.0
-	github.com/zalgonoise/logx v0.0.0-20221128200033-709cc6ffd362
+	github.com/zalgonoise/logx v0.0.0-20221204231347-1b448b9d61b4
 	gopkg.in/yaml.v2 v2.4.0
 )
 
@@ -35,6 +35,8 @@ require (
 	github.com/opencontainers/runc v1.1.4 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
+	github.com/zalgonoise/x/ptr v0.0.0-20221206212221-ffe0c1d0136f // indirect
+	github.com/zalgonoise/x/spanner v0.0.0-20221206212221-ffe0c1d0136f // indirect
 	go.opencensus.io v0.24.0 // indirect
 	golang.org/x/mod v0.6.0 // indirect
 	golang.org/x/net v0.1.0 // indirect
