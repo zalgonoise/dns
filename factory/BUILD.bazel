@@ -31,5 +31,7 @@ go_library(
         "@com_github_zalgonoise_logx//handlers",
         "@com_github_zalgonoise_logx//handlers/jsonh",
         "@com_github_zalgonoise_logx//handlers/texth",
+        "@com_github_zalgonoise_x_spanner//:spanner",
+        "@com_github_zalgonoise_x_spanner//export",
     ],
 )

@@ -3293,8 +3293,8 @@ go_repository(
 go_repository(
     name = "com_github_zalgonoise_x_spanner",
     importpath = "github.com/zalgonoise/x/spanner",
-    sum = "h1:FTLA/2UNkhHcWuKWE8UT8pN7cLIYd1/YzPoNQshniW0=",
-    version = "v0.0.0-20221206212221-ffe0c1d0136f",
+    sum = "h1:ZQ70eL93i3oDdghiAoOgoeSefz8EZJPEH86V9+AwROM=",
+    version = "v0.0.0-20221209223501-175b121a97e4",
 )
 
 gazelle_dependencies()
@@ -3367,6 +3367,6 @@ container_pull(
 go_repository(
     name = "com_github_zalgonoise_logx",
     importpath = "github.com/zalgonoise/logx",
-    sum = "h1:5EEb9aS41hddmsoXLXvE1dOi7wysEmZqoQTTUbuRPhg=",
-    version = "v0.0.0-20221204231347-1b448b9d61b4",
+    sum = "h1:r383Oz1CqWn1iqFXbpTiufzPJD/hZ9IAnc7TfYxTybc=",
+    version = "v0.0.0-20221210023657-9db6d0b14e54",
 )
