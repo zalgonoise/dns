@@ -15,5 +15,5 @@ func HealthRepository(rtype string) health.Repository {
 		healthRepo = simplehealth.New()
 	}
 
-	return health.WithTrace(healthRepo)
+	return healthRepo
 }
