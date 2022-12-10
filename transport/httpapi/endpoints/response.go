@@ -7,8 +7,8 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/zalgonoise/attr"
 	"github.com/zalgonoise/dns/store/encoder"
-	"github.com/zalgonoise/logx/attr"
 	"github.com/zalgonoise/x/spanner"
 )
 

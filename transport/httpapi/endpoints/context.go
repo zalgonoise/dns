@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"github.com/zalgonoise/attr"
 	"github.com/zalgonoise/logx"
-	"github.com/zalgonoise/logx/attr"
 	"github.com/zalgonoise/x/spanner"
 )
 

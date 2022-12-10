@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/miekg/dns"
+	"github.com/zalgonoise/attr"
 	"github.com/zalgonoise/dns/transport/udp"
-	"github.com/zalgonoise/logx/attr"
 	"github.com/zalgonoise/x/spanner"
 )
 

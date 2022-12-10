@@ -5,11 +5,11 @@ import (
 	"os"
 	"strings"
 
+	"github.com/zalgonoise/attr"
 	"github.com/zalgonoise/dns/cmd/config"
 	"github.com/zalgonoise/dns/service"
 	"github.com/zalgonoise/dns/transport/httpapi"
 	"github.com/zalgonoise/logx"
-	"github.com/zalgonoise/logx/attr"
 	"github.com/zalgonoise/x/spanner"
 	"github.com/zalgonoise/x/spanner/export"
 )

@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
+	"github.com/zalgonoise/attr"
 	"github.com/zalgonoise/dns/store"
-	"github.com/zalgonoise/logx/attr"
 	"github.com/zalgonoise/x/spanner"
 )
 

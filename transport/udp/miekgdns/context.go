@@ -5,8 +5,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/miekg/dns"
+	"github.com/zalgonoise/attr"
 	"github.com/zalgonoise/logx"
-	"github.com/zalgonoise/logx/attr"
 	"github.com/zalgonoise/x/spanner"
 )
 
