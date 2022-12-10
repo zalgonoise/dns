@@ -24,8 +24,7 @@ func (e *endpoints) newCtx(service string, attrs ...attr.Attr) context.Context {
 	namespace := attr.New("req", nsAttr)
 
 	ctx := context.WithValue(context.Background(), ResponseEncoderKey, e.enc)
-	ctx = logx.InContext(ctx, e.logger.With(namespace))
-	return ctx
+	return logx.InContext(ctx, e.logger.With(namespace))
 }
 
 // newCtxAndSpan creates a new context for service `service` with attributes `attrs`, scoped to
@@ -38,25 +37,18 @@ func (e *endpoints) newCtx(service string, attrs ...attr.Attr) context.Context {
 // The input *http.Request `r` is used to registed the remote address and user agent in the root span
 //
 // The resulting context is returned alongside the created Span and a closure function for it
-func (e *endpoints) newCtxAndSpan(r *http.Request, service string, attrs ...attr.Attr) (context.Context, spanner.Span, func()) {
+func (e *endpoints) newCtxAndSpan(r *http.Request, service string, attrs ...attr.Attr) (context.Context, spanner.Span) {
 	var nsAttr = []attr.Attr{
-		attr.String("req_id", uuid.New().String()),
 		attr.String("module", service),
+		attr.String("req_id", uuid.New().String()),
+		attr.String("remote_addr", r.RemoteAddr),
+		attr.String("user_agent", r.UserAgent()),
 	}
 	nsAttr = append(nsAttr, attrs...)
 	namespace := attr.New("req", nsAttr)
 
 	ctx := context.WithValue(r.Context(), ResponseEncoderKey, e.enc)
-	ctx = logx.InContext(ctx, e.logger.With(namespace))
-	ctx, span := spanner.Start(ctx, service,
-		attr.String("remote_addr", r.RemoteAddr),
-		attr.String("user_agent", r.UserAgent()),
-	)
+	ctx, span := spanner.Start(ctx, service, namespace)
 
-	return ctx, span, func() {
-		span.End()
-
-		spans := spanner.Extract(ctx)
-		logx.From(ctx).Trace("trace", attr.Int("span_len", len(spans)), attr.New("spans", spans))
-	}
+	return ctx, span
 }
