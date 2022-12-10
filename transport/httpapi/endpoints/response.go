@@ -53,7 +53,7 @@ type HTTPWritter interface {
 type HttpResponse[T any] struct {
 	Success bool   `json:"success,omitempty"`
 	Message string `json:"message,omitempty"`
-	Error   error  `json:"error,omitempty"`
+	Error   string `json:"error,omitempty"`
 	Data    *T     `json:"data,omitempty"`
 	Status  int    `json:"-"`
 }
@@ -70,7 +70,7 @@ func NewResponse[T any](status int, message string, err error, data *T) HttpResp
 		return HttpResponse[T]{
 			Success: false,
 			Message: message,
-			Error:   err,
+			Error:   err.Error(),
 			Data:    nil,
 			Status:  status,
 		}
@@ -79,7 +79,7 @@ func NewResponse[T any](status int, message string, err error, data *T) HttpResp
 	return HttpResponse[T]{
 		Success: true,
 		Message: message,
-		Error:   nil,
+		Error:   "",
 		Data:    data,
 		Status:  status,
 	}
