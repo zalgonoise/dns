@@ -36,19 +36,16 @@ func (e *endpoints) newCtx(service string, attrs ...attr.Attr) context.Context {
 //
 // The input *http.Request `r` is used to registed the remote address and user agent in the root span
 //
-// The resulting context is returned alongside the created Span and a closure function for it
+// The resulting context is returned alongside the created Span
 func (e *endpoints) newCtxAndSpan(r *http.Request, service string, attrs ...attr.Attr) (context.Context, spanner.Span) {
-	var nsAttr = []attr.Attr{
+	ctx := context.WithValue(r.Context(), ResponseEncoderKey, e.enc)
+	ctx, span := spanner.Start(ctx, service, attr.New("req", attr.Attrs{
 		attr.String("module", service),
 		attr.String("req_id", uuid.New().String()),
 		attr.String("remote_addr", r.RemoteAddr),
 		attr.String("user_agent", r.UserAgent()),
-	}
-	nsAttr = append(nsAttr, attrs...)
-	namespace := attr.New("req", nsAttr)
-
-	ctx := context.WithValue(r.Context(), ResponseEncoderKey, e.enc)
-	ctx, span := spanner.Start(ctx, service, namespace)
+	}))
+	span.Add(attrs...)
 
 	return ctx, span
 }

@@ -22,16 +22,15 @@ func (s *udps) newCtx(service string, attrs ...attr.Attr) context.Context {
 }
 
 func (s *udps) newCtxAndSpan(w dns.ResponseWriter, service string, attrs ...attr.Attr) (context.Context, spanner.Span) {
-	var nsAttr = []attr.Attr{
-		attr.String("module", service),
-		attr.String("req_id", uuid.New().String()),
-		attr.String("remote_addr", w.RemoteAddr().String()),
-	}
-
-	nsAttr = append(nsAttr, attrs...)
-	namespace := attr.New("req", nsAttr)
-
-	ctx, span := spanner.Start(context.Background(), service, namespace)
-
+	ctx, span := spanner.Start(
+		context.Background(),
+		service,
+		attr.New("req", []attr.Attr{
+			attr.String("module", service),
+			attr.String("req_id", uuid.New().String()),
+			attr.String("remote_addr", w.RemoteAddr().String()),
+		}),
+	)
+	span.Add(attrs...)
 	return ctx, span
 }
