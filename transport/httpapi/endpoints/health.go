@@ -5,8 +5,8 @@ import (
 )
 
 func (e *endpoints) Health(w http.ResponseWriter, r *http.Request) {
-	ctx, _, done := e.newCtxAndSpan(r, "http.Health")
-	defer done()
+	ctx, s := e.newCtxAndSpan(r, "http.Health")
+	defer s.End()
 
 	report := e.s.Health(ctx)
 

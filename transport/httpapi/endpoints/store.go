@@ -7,8 +7,8 @@ import (
 )
 
 func (e *endpoints) AddRecord(w http.ResponseWriter, r *http.Request) {
-	ctx, _, done := e.newCtxAndSpan(r, "http.AddRecord")
-	defer done()
+	ctx, s := e.newCtxAndSpan(r, "http.AddRecord")
+	defer s.End()
 
 	record, err := readBody[store.Record](ctx, r)
 	if err != nil {
@@ -36,8 +36,8 @@ func (e *endpoints) AddRecord(w http.ResponseWriter, r *http.Request) {
 }
 
 func (e *endpoints) ListRecords(w http.ResponseWriter, r *http.Request) {
-	ctx, _, done := e.newCtxAndSpan(r, "http.ListRecords")
-	defer done()
+	ctx, s := e.newCtxAndSpan(r, "http.ListRecords")
+	defer s.End()
 
 	records, err := e.s.ListRecords(ctx)
 	if err != nil {
@@ -51,8 +51,8 @@ func (e *endpoints) ListRecords(w http.ResponseWriter, r *http.Request) {
 }
 
 func (e *endpoints) GetRecordByDomain(w http.ResponseWriter, r *http.Request) {
-	ctx, _, done := e.newCtxAndSpan(r, "http.GetRecordByDomain")
-	defer done()
+	ctx, s := e.newCtxAndSpan(r, "http.GetRecordByDomain")
+	defer s.End()
 
 	record, err := readBody[store.Record](ctx, r)
 	if err != nil {
@@ -73,8 +73,8 @@ func (e *endpoints) GetRecordByDomain(w http.ResponseWriter, r *http.Request) {
 }
 
 func (e *endpoints) GetRecordByAddress(w http.ResponseWriter, r *http.Request) {
-	ctx, _, done := e.newCtxAndSpan(r, "http.GetRecordByAddress")
-	defer done()
+	ctx, s := e.newCtxAndSpan(r, "http.GetRecordByAddress")
+	defer s.End()
 
 	record, err := readBody[store.Record](ctx, r)
 	if err != nil {
@@ -95,8 +95,8 @@ func (e *endpoints) GetRecordByAddress(w http.ResponseWriter, r *http.Request) {
 }
 
 func (e *endpoints) UpdateRecord(w http.ResponseWriter, r *http.Request) {
-	ctx, _, done := e.newCtxAndSpan(r, "http.UpdateRecord")
-	defer done()
+	ctx, s := e.newCtxAndSpan(r, "http.UpdateRecord")
+	defer s.End()
 
 	rwt, err := readBody[store.RecordWithTarget](ctx, r)
 	if err != nil {
@@ -124,8 +124,8 @@ func (e *endpoints) UpdateRecord(w http.ResponseWriter, r *http.Request) {
 }
 
 func (e *endpoints) DeleteRecord(w http.ResponseWriter, r *http.Request) {
-	ctx, _, done := e.newCtxAndSpan(r, "http.DeleteRecord")
-	defer done()
+	ctx, s := e.newCtxAndSpan(r, "http.DeleteRecord")
+	defer s.End()
 
 	record, err := readBody[store.Record](ctx, r)
 	if err != nil {

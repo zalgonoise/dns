@@ -7,8 +7,8 @@ import (
 )
 
 func (e *endpoints) StartDNS(w http.ResponseWriter, r *http.Request) {
-	ctx, _, done := e.newCtxAndSpan(r, "http.StartDNS")
-	defer done()
+	ctx, s := e.newCtxAndSpan(r, "http.StartDNS")
+	defer s.End()
 
 	var err error
 	go func() {
@@ -26,8 +26,8 @@ func (e *endpoints) StartDNS(w http.ResponseWriter, r *http.Request) {
 }
 
 func (e *endpoints) StopDNS(w http.ResponseWriter, r *http.Request) {
-	ctx, _, done := e.newCtxAndSpan(r, "http.StopDNS")
-	defer done()
+	ctx, s := e.newCtxAndSpan(r, "http.StopDNS")
+	defer s.End()
 
 	err := e.UDP.Stop(ctx)
 	if err != nil {
@@ -41,8 +41,8 @@ func (e *endpoints) StopDNS(w http.ResponseWriter, r *http.Request) {
 }
 
 func (e *endpoints) ReloadDNS(w http.ResponseWriter, r *http.Request) {
-	ctx, _, done := e.newCtxAndSpan(r, "http.ReloadDNS")
-	defer done()
+	ctx, s := e.newCtxAndSpan(r, "http.ReloadDNS")
+	defer s.End()
 
 	var err error
 	if e.UDP.Running(ctx) {

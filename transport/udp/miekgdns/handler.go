@@ -10,8 +10,8 @@ import (
 )
 
 func (u *udps) handleRequest(w dns.ResponseWriter, r *dns.Msg) {
-	ctx, span, done := u.newCtxAndSpan(w, "udp.handleRequest")
-	defer done()
+	ctx, s := u.newCtxAndSpan(w, "udp.handleRequest")
+	defer s.End()
 
 	m := new(dns.Msg)
 	m.SetReply(r)
@@ -27,7 +27,7 @@ func (u *udps) handleRequest(w dns.ResponseWriter, r *dns.Msg) {
 
 	err := w.WriteMsg(m)
 	if err != nil {
-		span.Event("error answering query", attr.String("error", err.Error()))
+		s.Event("error answering query", attr.String("error", err.Error()))
 		u.err = err
 	}
 }
