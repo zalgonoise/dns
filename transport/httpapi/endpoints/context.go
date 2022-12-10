@@ -6,26 +6,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/zalgonoise/attr"
-	"github.com/zalgonoise/logx"
 	"github.com/zalgonoise/x/spanner"
 )
-
-// newCtx creates a new context for service `service` with attributes `attrs`, scoped to
-// a "req" namespace that includes a UUID for the request and the service string `service`
-//
-// The context is also wrapped with the endpoints encoder (or a new JSON encoder) so
-// the response writer can use it
-func (e *endpoints) newCtx(service string, attrs ...attr.Attr) context.Context {
-	var nsAttr = []attr.Attr{
-		attr.String("req_id", uuid.New().String()),
-		attr.String("module", service),
-	}
-	nsAttr = append(nsAttr, attrs...)
-	namespace := attr.New("req", nsAttr)
-
-	ctx := context.WithValue(context.Background(), ResponseEncoderKey, e.enc)
-	return logx.InContext(ctx, e.logger.With(namespace))
-}
 
 // newCtxAndSpan creates a new context for service `service` with attributes `attrs`, scoped to
 // a "req" namespace that includes a UUID for the request and the service string `service`,
