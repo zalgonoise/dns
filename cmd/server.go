@@ -1,13 +1,14 @@
 package cmd
 
 import (
+	"context"
 	"os"
 
-	"log"
-
+	"github.com/zalgonoise/attr"
 	"github.com/zalgonoise/dns/cmd/config"
 	"github.com/zalgonoise/dns/cmd/flags"
 	"github.com/zalgonoise/dns/factory"
+	"github.com/zalgonoise/x/spanner"
 
 	"github.com/zalgonoise/dns/transport/httpapi"
 )
@@ -17,6 +18,8 @@ import (
 //
 // Blocking call; will error out (with os.Exit(1)) if failed
 func Run() {
+	ctx, s := spanner.Start(context.Background(), "starting DNS server")
+
 	var (
 		conf *config.Config
 		svr  httpapi.Server
@@ -31,16 +34,21 @@ func Run() {
 	// start HTTP server
 	// defer graceful closure
 	defer func() {
-		err := svr.Stop()
+		err := svr.Stop(ctx)
 		if err != nil {
-			log.Fatalf("error stopping HTTP server: %v", err)
+			s.Event("failed to stop HTTP server in the deferred function",
+				attr.String("error", err.Error()),
+			)
+			s.End()
 			os.Exit(1)
 		}
 	}()
 
-	err := svr.Start()
+	err := svr.Start(ctx)
 	if err != nil {
-		log.Fatalf("error starting HTTP server: %v", err)
+		s.Event("failed to start HTTP server", attr.String("error", err.Error()))
+		s.End()
 		os.Exit(1)
 	}
+	s.End()
 }
