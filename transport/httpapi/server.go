@@ -4,11 +4,14 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+
+	"github.com/zalgonoise/attr"
+	"github.com/zalgonoise/x/spanner"
 )
 
 type Server interface {
-	Start() error
-	Stop() error
+	Start(ctx context.Context) error
+	Stop(ctx context.Context) error
 }
 
 type server struct {
@@ -42,12 +45,36 @@ func NewServer(api HTTPAPI, port int) Server {
 	return srv
 }
 
-func (s *server) Start() error {
-	return s.srv.ListenAndServe()
+func (s *server) Start(ctx context.Context) error {
+	ctx, span := spanner.Start(ctx, "http.Start")
+	defer span.End()
+
+	err := s.srv.ListenAndServe()
+	if err != nil {
+		span.Event("failed to start HTTP server", attr.New("error", err.Error()))
+		return err
+	}
+	return nil
 }
 
-func (s *server) Stop() error {
-	s.ep.StopDNS(&responseWriter{}, &http.Request{})
-	return s.srv.Shutdown(context.Background())
+func (s *server) Stop(ctx context.Context) error {
+	ctx, span := spanner.Start(ctx, "http.Stop")
+	defer span.End()
 
+	rw := &responseWriter{}
+	s.ep.StopDNS(rw, &http.Request{})
+
+	if rw.header != 200 {
+		span.Event("issue stopping UDP server",
+			attr.Int("status", rw.header),
+			attr.String("response", rw.response),
+		)
+	}
+
+	err := s.srv.Shutdown(ctx)
+	if err != nil {
+		span.Event("failed to stop HTTP server", attr.New("error", err.Error()))
+		return err
+	}
+	return nil
 }
