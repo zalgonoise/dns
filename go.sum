@@ -688,6 +688,12 @@ github.com/zalgonoise/logx v0.0.0-20221201215814-b35206ef8cd2 h1:NHBr42+pmgpageh
 github.com/zalgonoise/logx v0.0.0-20221201215814-b35206ef8cd2/go.mod h1:ZP1D2HrYAkzTrr6BSYtOLYtTX7qLpdKfeQV0vRPvmS8=
 github.com/zalgonoise/logx v0.0.0-20221204231347-1b448b9d61b4 h1:5EEb9aS41hddmsoXLXvE1dOi7wysEmZqoQTTUbuRPhg=
 github.com/zalgonoise/logx v0.0.0-20221204231347-1b448b9d61b4/go.mod h1:ZP1D2HrYAkzTrr6BSYtOLYtTX7qLpdKfeQV0vRPvmS8=
+github.com/zalgonoise/logx v0.0.0-20221210012208-9ce0559c0713 h1:vlHKA7IJONROtnUNoQkrO8EYhT6eCrIfR3xAk9qJD24=
+github.com/zalgonoise/logx v0.0.0-20221210012208-9ce0559c0713/go.mod h1:ZP1D2HrYAkzTrr6BSYtOLYtTX7qLpdKfeQV0vRPvmS8=
+github.com/zalgonoise/logx v0.0.0-20221210020837-e32fc2d5ba99 h1:gXQ9aJb/twPBYKBj6h0JiUJN64ax49KofvgCRs9J7y4=
+github.com/zalgonoise/logx v0.0.0-20221210020837-e32fc2d5ba99/go.mod h1:ZP1D2HrYAkzTrr6BSYtOLYtTX7qLpdKfeQV0vRPvmS8=
+github.com/zalgonoise/logx v0.0.0-20221210023657-9db6d0b14e54 h1:r383Oz1CqWn1iqFXbpTiufzPJD/hZ9IAnc7TfYxTybc=
+github.com/zalgonoise/logx v0.0.0-20221210023657-9db6d0b14e54/go.mod h1:RObSGdJdeQFYaa+jz4OndhkxJf6mC7Hd/ugyXNpEOxU=
 github.com/zalgonoise/x/ptr v0.0.0-20221206212221-ffe0c1d0136f h1:lRdls+xkrN0et7UKh/8vXs99GD4a2YfWC10u0meWJNs=
 github.com/zalgonoise/x/ptr v0.0.0-20221206212221-ffe0c1d0136f/go.mod h1:8FJE6g42HqjHLVszmfbt6M25Rl5FdIKg93w+ob7bFWw=
 github.com/zalgonoise/x/spanner v0.0.0-20221201233051-ce5b11bd2802 h1:V/QEcIqYa9+jq/fS+jL8uj4NlMkt2ovU4IfXdFHgLwU=
@@ -700,6 +706,10 @@ github.com/zalgonoise/x/spanner v0.0.0-20221206201329-484f27a83f80 h1:I6x8Smo1xt
 github.com/zalgonoise/x/spanner v0.0.0-20221206201329-484f27a83f80/go.mod h1:9ok/nrKP+go5fIyNTlBfuLebILZ2FGoZ7rYb9QSJngI=
 github.com/zalgonoise/x/spanner v0.0.0-20221206212221-ffe0c1d0136f h1:FTLA/2UNkhHcWuKWE8UT8pN7cLIYd1/YzPoNQshniW0=
 github.com/zalgonoise/x/spanner v0.0.0-20221206212221-ffe0c1d0136f/go.mod h1:9ok/nrKP+go5fIyNTlBfuLebILZ2FGoZ7rYb9QSJngI=
+github.com/zalgonoise/x/spanner v0.0.0-20221208231852-15cdd3fda502 h1:UoPOh4b9qb/l1aS3ldt+2BTn08Kr/cCKC4dwnrRhKqo=
+github.com/zalgonoise/x/spanner v0.0.0-20221208231852-15cdd3fda502/go.mod h1:9ok/nrKP+go5fIyNTlBfuLebILZ2FGoZ7rYb9QSJngI=
+github.com/zalgonoise/x/spanner v0.0.0-20221209223501-175b121a97e4 h1:ZQ70eL93i3oDdghiAoOgoeSefz8EZJPEH86V9+AwROM=
+github.com/zalgonoise/x/spanner v0.0.0-20221209223501-175b121a97e4/go.mod h1:9ok/nrKP+go5fIyNTlBfuLebILZ2FGoZ7rYb9QSJngI=
 go.etcd.io/bbolt v1.3.2/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
 go.etcd.io/bbolt v1.3.3/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
 go.etcd.io/bbolt v1.3.5/go.mod h1:G5EMThwa9y8QZGBClrRx5EY+Yw9kAhnjy3bSjsnlVTQ=

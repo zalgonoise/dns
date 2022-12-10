@@ -6,7 +6,7 @@ require (
 	github.com/goccy/go-json v0.10.0
 	github.com/miekg/dns v1.1.50
 	github.com/testcontainers/testcontainers-go v0.15.0
-	github.com/zalgonoise/logx v0.0.0-20221204231347-1b448b9d61b4
+	github.com/zalgonoise/logx v0.0.0-20221210023657-9db6d0b14e54
 	gopkg.in/yaml.v2 v2.4.0
 )
 
@@ -36,7 +36,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/zalgonoise/x/ptr v0.0.0-20221206212221-ffe0c1d0136f // indirect
-	github.com/zalgonoise/x/spanner v0.0.0-20221206212221-ffe0c1d0136f // indirect
+	github.com/zalgonoise/x/spanner v0.0.0-20221209223501-175b121a97e4 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	golang.org/x/mod v0.6.0 // indirect
 	golang.org/x/net v0.1.0 // indirect
