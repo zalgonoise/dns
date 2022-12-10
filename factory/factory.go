@@ -10,11 +10,14 @@ import (
 	"github.com/zalgonoise/dns/transport/httpapi"
 	"github.com/zalgonoise/logx"
 	"github.com/zalgonoise/logx/attr"
+	"github.com/zalgonoise/x/spanner"
+	"github.com/zalgonoise/x/spanner/export"
 )
 
 func From(conf *config.Config) httpapi.Server {
 	// initialize logger
 	logger := Logger(conf.Logger.Type, conf.Logger.Path)
+	spanner.To(export.Logger(logger))
 
 	// initialize DNS repository
 	dnsRepo := DNSRepository(
