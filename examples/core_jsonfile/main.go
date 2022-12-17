@@ -7,7 +7,7 @@ import (
 	"github.com/zalgonoise/attr"
 	"github.com/zalgonoise/dns/cmd/config"
 	"github.com/zalgonoise/dns/factory"
-	"github.com/zalgonoise/x/spanner"
+	"github.com/zalgonoise/spanner"
 )
 
 func main() {

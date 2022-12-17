@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/zalgonoise/attr"
-	"github.com/zalgonoise/x/spanner"
+	"github.com/zalgonoise/spanner"
 )
 
 type withTrace struct {
@@ -20,11 +20,12 @@ func WithTrace(r Repository) Repository {
 // Create will add a new entry in they key-value store to include a
 // new Record, returning an error
 func (t withTrace) Create(ctx context.Context, records ...*Record) error {
-	ctx, s := spanner.Start(ctx, "store.Create",
+	ctx, s := spanner.Start(ctx, "store.Create")
+	defer s.End()
+	s.Add(
 		attr.Int("records_length", len(records)),
 		attr.New("records", records),
 	)
-	defer s.End()
 
 	err := t.r.Create(ctx, records...)
 	if err != nil {
@@ -56,11 +57,12 @@ func (t withTrace) List(ctx context.Context) ([]*Record, error) {
 //
 // FindByTypeAndDomain(ctx, "A", "service.mydomain") -> { "127.0.0.1", nil }
 func (t withTrace) FindByTypeAndDomain(ctx context.Context, rtype string, domain string) (*Record, error) {
-	ctx, s := spanner.Start(ctx, "store.FindByTypeAndDomain",
+	ctx, s := spanner.Start(ctx, "store.FindByTypeAndDomain")
+	defer s.End()
+	s.Add(
 		attr.String("record_type", rtype),
 		attr.String("domain", domain),
 	)
-	defer s.End()
 
 	r, err := t.r.FindByTypeAndDomain(ctx, rtype, domain)
 	if err != nil {
@@ -76,10 +78,9 @@ func (t withTrace) FindByTypeAndDomain(ctx context.Context, rtype string, domain
 //
 // FilterByDomain(ctx, "service.mydomain") -> { ["127.0.0.1"], nil }
 func (t withTrace) FilterByDomain(ctx context.Context, domain string) ([]*Record, error) {
-	ctx, s := spanner.Start(ctx, "store.FilterByDomain",
-		attr.String("domain", domain),
-	)
+	ctx, s := spanner.Start(ctx, "store.FilterByDomain")
 	defer s.End()
+	s.Add(attr.String("domain", domain))
 
 	records, err := t.r.FilterByDomain(ctx, domain)
 	if err != nil {
@@ -98,10 +99,9 @@ func (t withTrace) FilterByDomain(ctx context.Context, domain string) ([]*Record
 //
 // FilterByDest(ctx, "127.0.0.1") -> { ["service.mydomain"], nil }
 func (t withTrace) FilterByDest(ctx context.Context, address string) ([]*Record, error) {
-	ctx, s := spanner.Start(ctx, "store.FilterByDest",
-		attr.String("address", address),
-	)
+	ctx, s := spanner.Start(ctx, "store.FilterByDest")
 	defer s.End()
+	s.Add(attr.String("address", address))
 
 	records, err := t.r.FilterByDest(ctx, address)
 	if err != nil {
@@ -119,11 +119,12 @@ func (t withTrace) FilterByDest(ctx context.Context, address string) ([]*Record,
 // Update will modify an existing record by targetting its domain string,
 // and by supplying a new version of the Record to update. Returns an error
 func (t withTrace) Update(ctx context.Context, domain string, r *Record) error {
-	ctx, s := spanner.Start(ctx, "store.Update",
+	ctx, s := spanner.Start(ctx, "store.Update")
+	defer s.End()
+	s.Add(
 		attr.String("target_domain", domain),
 		attr.New("record", r),
 	)
-	defer s.End()
 
 	if domain != r.Name {
 		s.Event("different domain name -- removing former entry")
@@ -139,10 +140,9 @@ func (t withTrace) Update(ctx context.Context, domain string, r *Record) error {
 
 // DeleteByAddress removes all records with IP address `addr`
 func (t withTrace) DeleteByAddress(ctx context.Context, addr string) error {
-	ctx, s := spanner.Start(ctx, "store.DeleteByAddress",
-		attr.String("address", addr),
-	)
+	ctx, s := spanner.Start(ctx, "store.DeleteByAddress")
 	defer s.End()
+	s.Add(attr.String("address", addr))
 
 	err := t.r.DeleteByAddress(ctx, addr)
 	if err != nil {
@@ -154,10 +154,9 @@ func (t withTrace) DeleteByAddress(ctx context.Context, addr string) error {
 
 // DeleteByDomain removes all records with domain name `name`
 func (t withTrace) DeleteByDomain(ctx context.Context, name string) error {
-	ctx, s := spanner.Start(ctx, "store.DeleteByDomain",
-		attr.String("domain", name),
-	)
+	ctx, s := spanner.Start(ctx, "store.DeleteByDomain")
 	defer s.End()
+	s.Add(attr.String("domain", name))
 
 	err := t.r.DeleteByDomain(ctx, name)
 	if err != nil {
@@ -169,11 +168,12 @@ func (t withTrace) DeleteByDomain(ctx context.Context, name string) error {
 
 // DeleteByTypeAndDomain removes all records with record type `rtype` and domain name `name`
 func (t withTrace) DeleteByTypeAndDomain(ctx context.Context, rtype, name string) error {
-	ctx, s := spanner.Start(ctx, "store.DeleteByTypeAndDomain",
+	ctx, s := spanner.Start(ctx, "store.DeleteByTypeAndDomain")
+	defer s.End()
+	s.Add(
 		attr.String("record_type", rtype),
 		attr.String("domain", name),
 	)
-	defer s.End()
 
 	err := t.r.DeleteByTypeAndDomain(ctx, rtype, name)
 	if err != nil {

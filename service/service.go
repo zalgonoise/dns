@@ -10,6 +10,7 @@ import (
 	"github.com/zalgonoise/dns/health"
 	"github.com/zalgonoise/dns/health/simplehealth"
 	"github.com/zalgonoise/dns/store"
+	"github.com/zalgonoise/logx"
 )
 
 var (
@@ -99,6 +100,11 @@ type withTrace struct {
 	s Service
 }
 
+type withLogger struct {
+	s   Service
+	log logx.Logger
+}
+
 // New will create a Service based on the input dns.Repository, store.Repository,
 // health.Repository and configuration. These elements are required in order to initialize
 // the Service with all elements and settings needed (such as HTTP port / UDP address)
@@ -130,5 +136,13 @@ func New(
 func WithTrace(s Service) Service {
 	return withTrace{
 		s: s,
+	}
+}
+
+// WithLogger wraps the input Service `s` with the input logx.Logger `logger`
+func WithLogger(s Service, logger logx.Logger) Service {
+	return withLogger{
+		s:   s,
+		log: logger,
 	}
 }

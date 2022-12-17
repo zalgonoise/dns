@@ -9,7 +9,7 @@ import (
 
 	"github.com/zalgonoise/attr"
 	"github.com/zalgonoise/dns/store/encoder"
-	"github.com/zalgonoise/x/spanner"
+	"github.com/zalgonoise/spanner"
 )
 
 var (
@@ -87,12 +87,13 @@ func NewResponse[T any](status int, message string, err error, data *T) HttpResp
 
 // WriteHTTP writes the contents of the object to the http.ResponseWriter `w`
 func (r HttpResponse[T]) WriteHTTP(ctx context.Context, w http.ResponseWriter) {
-	ctx, s := spanner.Start(ctx, "http.HttpResponse.WriteHTTP",
+	ctx, s := spanner.Start(ctx, "http.HttpResponse.WriteHTTP")
+	defer s.End()
+	s.Add(
 		attr.Int("http_status", r.Status),
 		attr.String("for_type", fmt.Sprintf("%T", *new(T))),
 		attr.New("response", r),
 	)
-	defer s.End()
 
 	enc := enc(ctx)
 
@@ -116,8 +117,9 @@ func (r HttpResponse[T]) WriteHTTP(ctx context.Context, w http.ResponseWriter) {
 //
 // Returns a pointer to the object T and an error
 func readBody[T any](ctx context.Context, r *http.Request) (*T, error) {
-	ctx, s := spanner.Start(ctx, "http.readBody", attr.String("for_type", fmt.Sprintf("%T", *new(T))))
+	ctx, s := spanner.Start(ctx, "http.readBody")
 	defer s.End()
+	s.Add(attr.String("for_type", fmt.Sprintf("%T", *new(T))))
 
 	b, err := io.ReadAll(r.Body)
 	if err != nil {

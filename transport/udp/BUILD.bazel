@@ -10,7 +10,7 @@ go_library(
     importpath = "github.com/zalgonoise/dns/transport/udp",
     visibility = ["//visibility:public"],
     deps = [
-        "@com_github_zalgonoise_logx//attr",
+        "@com_github_zalgonoise_attr//:go_default_library",
         "@com_github_zalgonoise_x_spanner//:spanner",
     ],
 )

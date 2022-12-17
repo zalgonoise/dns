@@ -9,7 +9,6 @@ require (
 	github.com/testcontainers/testcontainers-go v0.15.0
 	github.com/zalgonoise/logx v0.0.0-20221210214610-c003c0f931be
 	github.com/zalgonoise/x/ptr v0.0.0-20221206212221-ffe0c1d0136f
-	github.com/zalgonoise/x/spanner v0.0.0-20221210215840-f9995140e836
 	gopkg.in/yaml.v2 v2.4.0
 )
 
@@ -37,7 +36,8 @@ require (
 	github.com/opencontainers/runc v1.1.4 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
-	github.com/zalgonoise/attr v0.0.0-20221210213709-1dd235ad9234 // indirect
+	github.com/zalgonoise/attr v0.0.0-20221211142006-7562f1f9106f // indirect
+	github.com/zalgonoise/spanner v0.0.0-20221217205307-b3b57f33cfa6 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	golang.org/x/mod v0.6.0 // indirect
 	golang.org/x/net v0.1.0 // indirect

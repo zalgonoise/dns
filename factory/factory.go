@@ -12,8 +12,8 @@ import (
 	"github.com/zalgonoise/dns/service"
 	"github.com/zalgonoise/dns/store"
 	"github.com/zalgonoise/dns/transport/httpapi"
-	"github.com/zalgonoise/x/spanner"
-	"github.com/zalgonoise/x/spanner/export"
+	"github.com/zalgonoise/spanner"
+	"github.com/zalgonoise/spanner/export"
 )
 
 func From(conf *config.Config) httpapi.Server {
@@ -46,7 +46,12 @@ func From(conf *config.Config) httpapi.Server {
 	s.Event("initialized Health repository")
 
 	// intialize service
-	svc := service.WithTrace(service.New(dnsRepo, storeRepo, healthRepo, conf))
+	svc := service.WithLogger(
+		service.WithTrace(
+			service.New(dnsRepo, storeRepo, healthRepo, conf),
+		),
+		logger,
+	)
 	s.Event("initialized service")
 
 	// initialize HTTP and DNS servers
@@ -63,14 +68,14 @@ func From(conf *config.Config) httpapi.Server {
 	// autostart DNS if configured
 	if conf.Autostart.DNS {
 		go func() {
-			ctx, s := spanner.Start(context.Background(), "factory.From",
-				attr.String("action", "autostart DNS server"),
-			)
+			ctx, s := spanner.Start(context.Background(), "factory.From")
+			s.Add(attr.String("action", "autostart DNS server"))
 
 			err := udps.Start(ctx)
 			if err != nil {
 				s.Event("error starting DNS server", attr.String("error", err.Error()))
 				s.End()
+				logger.Fatal("error starting DNS server", attr.String("error", err.Error()))
 				os.Exit(1)
 			}
 			s.End()

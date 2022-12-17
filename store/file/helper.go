@@ -8,7 +8,7 @@ import (
 
 	"github.com/zalgonoise/attr"
 	"github.com/zalgonoise/dns/store"
-	"github.com/zalgonoise/x/spanner"
+	"github.com/zalgonoise/spanner"
 )
 
 func toEntity(s *Store) []*store.Record {

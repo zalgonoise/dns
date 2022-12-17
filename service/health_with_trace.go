@@ -5,7 +5,7 @@ import (
 
 	"github.com/zalgonoise/attr"
 	"github.com/zalgonoise/dns/health"
-	"github.com/zalgonoise/x/spanner"
+	"github.com/zalgonoise/spanner"
 )
 
 // StoreHealth uses the health.Repository to generate a health.StoreReport

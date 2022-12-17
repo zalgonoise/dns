@@ -6,7 +6,7 @@ import (
 	"github.com/miekg/dns"
 	"github.com/zalgonoise/attr"
 	"github.com/zalgonoise/dns/transport/udp"
-	"github.com/zalgonoise/x/spanner"
+	"github.com/zalgonoise/spanner"
 )
 
 // Start launches the DNS server, returning an error
@@ -54,8 +54,9 @@ func (u *udps) Stop(ctx context.Context) error {
 
 // Running returns a boolean on whether the UDP server is running or not
 func (u *udps) Running(ctx context.Context) bool {
-	_, s := spanner.Start(ctx, "udp.Running", attr.New("running", u.on))
+	_, s := spanner.Start(ctx, "udp.Running")
 	defer s.End()
+	s.Add(attr.New("running", u.on))
 
 	return u.on
 }

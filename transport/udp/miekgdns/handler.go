@@ -6,7 +6,7 @@ import (
 	"github.com/miekg/dns"
 	"github.com/zalgonoise/attr"
 	"github.com/zalgonoise/dns/store"
-	"github.com/zalgonoise/x/spanner"
+	"github.com/zalgonoise/spanner"
 )
 
 func (u *udps) handleRequest(w dns.ResponseWriter, r *dns.Msg) {
@@ -70,11 +70,12 @@ func (u *udps) parseQuery(ctx context.Context, m *dns.Msg) {
 }
 
 func (u *udps) answer(ctx context.Context, r *store.Record, m *dns.Msg) {
-	ctx, s := spanner.Start(ctx, "udp.answer",
+	ctx, s := spanner.Start(ctx, "udp.answer")
+	defer s.End()
+	s.Add(
 		attr.String("name", r.Name),
 		attr.String("type", r.Type),
 	)
-	defer s.End()
 
 	name := r.Name
 	if r.Name[len(r.Name)-1] == u.conf.Prefix[0] {

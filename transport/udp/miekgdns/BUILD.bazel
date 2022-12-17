@@ -16,8 +16,7 @@ go_library(
         "//transport/udp",
         "@com_github_google_uuid//:uuid",
         "@com_github_miekg_dns//:dns",
-        "@com_github_zalgonoise_logx//:logx",
-        "@com_github_zalgonoise_logx//attr",
+        "@com_github_zalgonoise_attr//:go_default_library",
         "@com_github_zalgonoise_x_spanner//:spanner",
     ],
 )

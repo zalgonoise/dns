@@ -5,13 +5,14 @@ import (
 
 	"github.com/zalgonoise/attr"
 	"github.com/zalgonoise/dns/store"
-	"github.com/zalgonoise/x/spanner"
+	"github.com/zalgonoise/spanner"
 )
 
 // AddRecord uses the store.Repository to create a DNS Record
 func (t withTrace) AddRecord(ctx context.Context, r *store.Record) error {
-	ctx, s := spanner.Start(ctx, "service.AddRecord", attr.New("record", r))
+	ctx, s := spanner.Start(ctx, "service.AddRecord")
 	defer s.End()
+	s.Add(attr.New("record", r))
 
 	err := t.s.AddRecord(ctx, r)
 	if err != nil {
@@ -23,8 +24,9 @@ func (t withTrace) AddRecord(ctx context.Context, r *store.Record) error {
 
 // AddRecords uses the store.Repository to create a set of DNS Records
 func (t withTrace) AddRecords(ctx context.Context, records ...*store.Record) error {
-	ctx, s := spanner.Start(ctx, "service.AddRecords", attr.New("records", records), attr.Int("len", len(records)))
+	ctx, s := spanner.Start(ctx, "service.AddRecords")
 	defer s.End()
+	s.Add(attr.New("records", records), attr.Int("len", len(records)))
 
 	err := t.s.AddRecords(ctx, records...)
 	if err != nil {
@@ -52,11 +54,12 @@ func (t withTrace) ListRecords(ctx context.Context) ([]*store.Record, error) {
 // GetRecordByDomain uses the store.Repository to return the DNS Record associated with
 // the domain name and record type found in store.Record `r`
 func (t withTrace) GetRecordByTypeAndDomain(ctx context.Context, rtype, domain string) (*store.Record, error) {
-	ctx, s := spanner.Start(ctx, "service.GetRecordByTypeAndDomain",
+	ctx, s := spanner.Start(ctx, "service.GetRecordByTypeAndDomain")
+	defer s.End()
+	s.Add(
 		attr.String("record_type", rtype),
 		attr.String("domain", domain),
 	)
-	defer s.End()
 
 	r, err := t.s.GetRecordByTypeAndDomain(ctx, rtype, domain)
 	if err != nil {
@@ -71,10 +74,9 @@ func (t withTrace) GetRecordByTypeAndDomain(ctx context.Context, rtype, domain s
 // GetRecordByDomain uses the store.Repository to return the DNS Records associated with
 // the IP address found in store.Record `r`
 func (t withTrace) GetRecordByAddress(ctx context.Context, address string) ([]*store.Record, error) {
-	ctx, s := spanner.Start(ctx, "service.GetRecordByAddress",
-		attr.String("address", address),
-	)
+	ctx, s := spanner.Start(ctx, "service.GetRecordByAddress")
 	defer s.End()
+	s.Add(attr.String("address", address))
 
 	records, err := t.s.GetRecordByAddress(ctx, address)
 	if err != nil {
@@ -89,11 +91,12 @@ func (t withTrace) GetRecordByAddress(ctx context.Context, address string) ([]*s
 // UpdateRecord uses the store.Repository to update the record with domain name `domain`,
 // based on the data provided in store.Record `r`
 func (t withTrace) UpdateRecord(ctx context.Context, domain string, r *store.Record) error {
-	ctx, s := spanner.Start(ctx, "service.UpdateRecord",
+	ctx, s := spanner.Start(ctx, "service.UpdateRecord")
+	defer s.End()
+	s.Add(
 		attr.String("target_domain", domain),
 		attr.New("record", r),
 	)
-	defer s.End()
 
 	err := t.s.UpdateRecord(ctx, domain, r)
 	if err != nil {
@@ -105,10 +108,9 @@ func (t withTrace) UpdateRecord(ctx context.Context, domain string, r *store.Rec
 
 // DeleteRecord uses the store.Repository to remove the store.Record based on input `r`
 func (t withTrace) DeleteRecord(ctx context.Context, r *store.Record) error {
-	ctx, s := spanner.Start(ctx, "service.DeleteRecord",
-		attr.New("record", r),
-	)
+	ctx, s := spanner.Start(ctx, "service.DeleteRecord")
 	defer s.End()
+	s.Add(attr.New("record", r))
 
 	err := t.s.DeleteRecord(ctx, r)
 	if err != nil {

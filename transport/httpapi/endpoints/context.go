@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/zalgonoise/attr"
-	"github.com/zalgonoise/x/spanner"
+	"github.com/zalgonoise/spanner"
 )
 
 // newCtxAndSpan creates a new context for service `service` with attributes `attrs`, scoped to
@@ -21,12 +21,15 @@ import (
 // The resulting context is returned alongside the created Span
 func (e *endpoints) newCtxAndSpan(r *http.Request, service string, attrs ...attr.Attr) (context.Context, spanner.Span) {
 	ctx := context.WithValue(r.Context(), ResponseEncoderKey, e.enc)
-	ctx, span := spanner.Start(ctx, service, attr.New("req", attr.Attrs{
-		attr.String("module", service),
-		attr.String("req_id", uuid.New().String()),
-		attr.String("remote_addr", r.RemoteAddr),
-		attr.String("user_agent", r.UserAgent()),
-	}))
+	ctx, span := spanner.Start(ctx, service)
+	span.Add(
+		attr.New("req", attr.Attrs{
+			attr.String("module", service),
+			attr.String("req_id", uuid.New().String()),
+			attr.String("remote_addr", r.RemoteAddr),
+			attr.String("user_agent", r.UserAgent()),
+		}),
+	)
 	span.Add(attrs...)
 
 	return ctx, span

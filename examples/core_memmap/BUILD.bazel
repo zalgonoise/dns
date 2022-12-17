@@ -8,6 +8,8 @@ go_library(
     deps = [
         "//cmd/config",
         "//factory",
+        "@com_github_zalgonoise_attr//:go_default_library",
+        "@com_github_zalgonoise_x_spanner//:spanner",
     ],
 )
 

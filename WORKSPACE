@@ -3290,14 +3290,21 @@ go_repository(
     version = "v0.0.0-20221206212221-ffe0c1d0136f",
 )
 
+gazelle_dependencies()
+
 go_repository(
-    name = "com_github_zalgonoise_x_spanner",
-    importpath = "github.com/zalgonoise/x/spanner",
-    sum = "h1:ZQ70eL93i3oDdghiAoOgoeSefz8EZJPEH86V9+AwROM=",
-    version = "v0.0.0-20221209223501-175b121a97e4",
+    name = "com_github_zalgonoise_attr",
+    importpath = "github.com/zalgonoise/attr",
+    sum = "h1:Cx6WEQHPvY849gJvKnP6sQomgKQnw21JCbwd6Cnmhao=",
+    version = "v0.0.0-20221211142006-7562f1f9106f",
 )
 
-gazelle_dependencies()
+go_repository(
+    name = "com_github_zalgonoise_spanner",
+    importpath = "github.com/zalgonoise/spanner",
+    sum = "h1:HdzHNHB+V53/FREZL06/EGiAoI7+P+OLJQOzCIlkcIg=",
+    version = "v0.0.0-20221217205307-b3b57f33cfa6",
+)
 
 ## buildifier
 http_archive(
@@ -3367,6 +3374,6 @@ container_pull(
 go_repository(
     name = "com_github_zalgonoise_logx",
     importpath = "github.com/zalgonoise/logx",
-    sum = "h1:r383Oz1CqWn1iqFXbpTiufzPJD/hZ9IAnc7TfYxTybc=",
-    version = "v0.0.0-20221210023657-9db6d0b14e54",
+    sum = "h1:ba6thk6xk6aWTGx0EshutbMf8bx6S20E3XQJBpvrQmk=",
+    version = "v0.0.0-20221210214610-c003c0f931be",
 )

@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/zalgonoise/attr"
-	"github.com/zalgonoise/x/spanner"
+	"github.com/zalgonoise/spanner"
 )
 
 type Server interface {

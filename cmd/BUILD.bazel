@@ -10,5 +10,7 @@ go_library(
         "//cmd/flags",
         "//factory",
         "//transport/httpapi",
+        "@com_github_zalgonoise_attr//:go_default_library",
+        "@com_github_zalgonoise_x_spanner//:spanner",
     ],
 )
