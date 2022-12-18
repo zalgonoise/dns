@@ -13,7 +13,7 @@ go_library(
     importpath = "github.com/zalgonoise/dns/store",
     visibility = ["//visibility:public"],
     deps = [
-        "@com_github_zalgonoise_attr//:go_default_library",
-        "@com_github_zalgonoise_x_spanner//:spanner",
+        "@com_github_zalgonoise_attr//:attr",
+        "@com_github_zalgonoise_spanner//:spanner",
     ],
 )

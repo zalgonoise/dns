@@ -7,7 +7,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/miekg/dns v1.1.50
 	github.com/testcontainers/testcontainers-go v0.15.0
-	github.com/zalgonoise/attr v0.0.0-20221211142006-7562f1f9106f
+	github.com/zalgonoise/attr v0.0.0-20221218020548-25d0939ced5d
 	github.com/zalgonoise/logx v0.0.0-20221210214610-c003c0f931be
 	github.com/zalgonoise/spanner v0.0.0-20221217205307-b3b57f33cfa6
 	github.com/zalgonoise/x/ptr v0.0.0-20221206212221-ffe0c1d0136f

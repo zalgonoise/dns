@@ -12,7 +12,7 @@ go_library(
     deps = [
         "//store",
         "@com_github_miekg_dns//:dns",
-        "@com_github_zalgonoise_attr//:go_default_library",
-        "@com_github_zalgonoise_x_spanner//:spanner",
+        "@com_github_zalgonoise_attr//:attr",
+        "@com_github_zalgonoise_spanner//:spanner",
     ],
 )

@@ -678,6 +678,8 @@ github.com/yvasiyarov/gorelic v0.0.0-20141212073537-a9bba5b9ab50/go.mod h1:NUSPS
 github.com/yvasiyarov/newrelic_platform_go v0.0.0-20140908184405-b21fdbd4370f/go.mod h1:GlGEuHIJweS1mbCqG+7vt2nvWLzLLnRHbXz5JKd/Qbg=
 github.com/zalgonoise/attr v0.0.0-20221211142006-7562f1f9106f h1:Cx6WEQHPvY849gJvKnP6sQomgKQnw21JCbwd6Cnmhao=
 github.com/zalgonoise/attr v0.0.0-20221211142006-7562f1f9106f/go.mod h1:AJnYvJHd3CA3CWDK/XTzHqENx1M6Jc+riBrp7myrm8o=
+github.com/zalgonoise/attr v0.0.0-20221218020548-25d0939ced5d h1:FQmuKnqJefm/vZV0nYJ/cBElgros1Q9nRD41GflLULY=
+github.com/zalgonoise/attr v0.0.0-20221218020548-25d0939ced5d/go.mod h1:AJnYvJHd3CA3CWDK/XTzHqENx1M6Jc+riBrp7myrm8o=
 github.com/zalgonoise/logx v0.0.0-20221210214610-c003c0f931be h1:ba6thk6xk6aWTGx0EshutbMf8bx6S20E3XQJBpvrQmk=
 github.com/zalgonoise/logx v0.0.0-20221210214610-c003c0f931be/go.mod h1:H1GvFfv7qC2rtnOLO49lHOHa8fsS6w0cjYhxw9/WamQ=
 github.com/zalgonoise/spanner v0.0.0-20221217205307-b3b57f33cfa6 h1:HdzHNHB+V53/FREZL06/EGiAoI7+P+OLJQOzCIlkcIg=

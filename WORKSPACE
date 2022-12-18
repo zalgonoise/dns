@@ -3295,8 +3295,8 @@ gazelle_dependencies()
 go_repository(
     name = "com_github_zalgonoise_attr",
     importpath = "github.com/zalgonoise/attr",
-    sum = "h1:Cx6WEQHPvY849gJvKnP6sQomgKQnw21JCbwd6Cnmhao=",
-    version = "v0.0.0-20221211142006-7562f1f9106f",
+    sum = "h1:FQmuKnqJefm/vZV0nYJ/cBElgros1Q9nRD41GflLULY=",
+    version = "v0.0.0-20221218020548-25d0939ced5d",
 )
 
 go_repository(
